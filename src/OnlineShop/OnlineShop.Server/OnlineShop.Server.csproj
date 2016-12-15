@@ -82,6 +82,13 @@
       <Project>{bda236b8-5a90-40fa-be61-b6f4d88da58a}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OnlineShop.ServiceContracts\OnlineShop.ServiceContracts.csproj">
+      <Project>{64a5130a-6b02-4b53-b4e9-c10a31e146e9}</Project>
+      <Name>OnlineShop.ServiceContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

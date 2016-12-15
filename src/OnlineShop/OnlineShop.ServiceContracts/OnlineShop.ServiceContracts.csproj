@@ -46,6 +46,7 @@
     <Compile Include="IOrderContract.cs" />
     <Compile Include="OrderContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

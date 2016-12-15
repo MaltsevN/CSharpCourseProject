@@ -10,40 +10,40 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.ServiceContracts
 {
-    public class OrderContract: IOrderContract
+    public class UserContract : IUserContract
     {
-        IRepository<Order> order;
+        IRepository<User> user;
 
-        public OrderContract(IRepository<Order> order)
+        public UserContract(IRepository<User> user)
         {
-            this.order = order;
+            this.user = user;
         }
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Create", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        public void Create(Order item)
+        public void Create(User item)
         {
-            order.Create(item);
-            order.Save();
+            user.Create(item);
+            user.Save();
         }
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Delete", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         public void Delete(int id)
         {
-            order.Delete(id);
-            order.Save();
+            user.Delete(id);
+            user.Save();
         }
-         public Order GetItem(int id)
+        public User GetItem(int id)
         {
-            return order.GetItem(id);
+            return user.GetItem(id);
         }
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetItemsList", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        public IEnumerable<Order> GetItemsList()
+        public IEnumerable<User> GetItemsList()
         {
-            return order.GetItemsList();
+            return user.GetItemsList();
         }
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Update", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        public void Update(Order item)
+        public void Update(User item)
         {
-            order.Update(item);
-            order.Save();
+            user.Update(item);
+            user.Save();
         }
     }
 }
