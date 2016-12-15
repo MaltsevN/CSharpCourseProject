@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DomainModel;
+using OnlineShop.Client.Common;
 using OnlineShop.Client.Services;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace OnlineShop.Client.ViewModels
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<Design.DesignOrderService>().As<IOrderService>();
+            builder.RegisterType<MessageService>().As<IMessageService>();
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
 
             //Desing Data

@@ -16,6 +16,7 @@ namespace OnlineShop.Client.ViewModels
     class OrdersWindowViewModel : BaseViewModel
     {
         private IOrderService orderService;
+        private IMessageService messageService;
         private ICollectionView collectionView;
 
         private string searchString = string.Empty;
@@ -25,6 +26,8 @@ namespace OnlineShop.Client.ViewModels
         public User User { get; set; }
 
         public string NewOrderName { get; set; }
+
+        public Order SelectedOrder { get; set; }
 
         public string SearchString
         {
@@ -40,9 +43,10 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        public OrdersWindowViewModel(IOrderService orderService)
+        public OrdersWindowViewModel(IOrderService orderService, IMessageService messageService)
         {
             this.orderService = orderService;
+            this.messageService = messageService;
             Orders = new ObservableCollection<Order>();
             collectionView = CollectionViewSource.GetDefaultView(Orders);
             collectionView.Filter = SearchFilter;
@@ -89,7 +93,9 @@ namespace OnlineShop.Client.ViewModels
                 PlacingDate = DateTime.UtcNow
             };
 
-            Orders.Add(newOrder);
+            orderService.Create(newOrder);
+            UpdateData();
+            NewOrderName = string.Empty;
         }
 
         #endregion
@@ -109,12 +115,48 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
+            UpdateData();
+        }
+        #endregion
+
+        #region DeleteOrderCommand
+        private RelayCommand deleteOrderCommand;
+
+        public ICommand DeleteOrderCommand
+        {
+            get
+            {
+                if (deleteOrderCommand == null)
+                    deleteOrderCommand = new RelayCommand(DeleteOrderCommandExecute, DeleteOrderCommandCanExecute);
+                return deleteOrderCommand;
+            }
+        }
+
+        private void DeleteOrderCommandExecute(object obj)
+        {
+            var result = messageService.ShowMessage("Are you sure you want to delete this order?", "Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
+            if (result == System.Windows.MessageBoxResult.Yes)
+            {
+                orderService.Delete(SelectedOrder.Id);
+                UpdateData();
+            } 
+        }
+
+        private bool DeleteOrderCommandCanExecute(object obj)
+        {
+            return SelectedOrder != null && SelectedOrder.Status == Status.NotDecorated;
+        }
+        #endregion
+
+        private void UpdateData()
+        {
+            Orders.Clear();
+
             var orders = orderService.GetOrders().Where(order => order.User == User);
             foreach (var order in orders)
             {
                 Orders.Add(order);
             }
         }
-        #endregion
     }
 }

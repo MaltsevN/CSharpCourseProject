@@ -57,6 +57,7 @@ namespace OnlineShop.Client.Design
 
         public void Create(Order order)
         {
+            order.Id = orders.Count;
             orders.Add(order);
         }
 
