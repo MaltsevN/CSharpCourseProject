@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class
     {
         void Create(T item);
         void Delete(int id);
