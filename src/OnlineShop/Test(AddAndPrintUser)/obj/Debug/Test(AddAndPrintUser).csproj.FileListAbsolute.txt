@@ -1,0 +1,14 @@
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\Test(AddAndPrintUser).exe.config
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\Test(AddAndPrintUser).exe
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\Test(AddAndPrintUser).pdb
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\DAL.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\DomainModel.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\EntityFramework.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\DAL.pdb
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\DomainModel.pdb
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\EntityFramework.xml
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\obj\Debug\Test(AddAndPrintUser).csprojResolveAssemblyReference.cache
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\obj\Debug\Test(AddAndPrintUser).exe
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\Test(AddAndPrintUser)\obj\Debug\Test(AddAndPrintUser).pdb

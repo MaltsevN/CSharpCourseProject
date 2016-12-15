@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{BDA236B8-5A90-40FA-BE61-B6F4D88DA58A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{886EF80A-8C2C-49AD-BE0D-78ED198B5245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test(AddAndPrintUser)", "Test(AddAndPrintUser)\Test(AddAndPrintUser).csproj", "{FF68E659-5785-4289-8CBA-90BB677C9040}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDA236B8-5A90-40FA-BE61-B6F4D88DA58A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA236B8-5A90-40FA-BE61-B6F4D88DA58A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA236B8-5A90-40FA-BE61-B6F4D88DA58A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA236B8-5A90-40FA-BE61-B6F4D88DA58A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886EF80A-8C2C-49AD-BE0D-78ED198B5245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886EF80A-8C2C-49AD-BE0D-78ED198B5245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886EF80A-8C2C-49AD-BE0D-78ED198B5245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886EF80A-8C2C-49AD-BE0D-78ED198B5245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF68E659-5785-4289-8CBA-90BB677C9040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF68E659-5785-4289-8CBA-90BB677C9040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF68E659-5785-4289-8CBA-90BB677C9040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF68E659-5785-4289-8CBA-90BB677C9040}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
