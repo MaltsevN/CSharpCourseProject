@@ -30,6 +30,7 @@ namespace OnlineShop.ServiceContracts
             user.Delete(id);
             user.Save();
         }
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetItem", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         public User GetItem(int id)
         {
             return user.GetItem(id);

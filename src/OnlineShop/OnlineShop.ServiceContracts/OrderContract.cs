@@ -30,7 +30,8 @@ namespace OnlineShop.ServiceContracts
             order.Delete(id);
             order.Save();
         }
-         public Order GetItem(int id)
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetItem", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        public Order GetItem(int id)
         {
             return order.GetItem(id);
         }
