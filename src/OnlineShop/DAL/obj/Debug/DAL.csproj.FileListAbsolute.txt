@@ -1,0 +1,12 @@
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\DAL.dll.config
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\DAL.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\DAL.pdb
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\DomainModel.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\EntityFramework.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\DomainModel.pdb
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\EntityFramework.xml
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\obj\Debug\DAL.dll
+C:\Users\Иван\CSharpCourseProject\src\OnlineShop\DAL\obj\Debug\DAL.pdb
