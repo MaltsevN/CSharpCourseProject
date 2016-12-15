@@ -64,6 +64,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\IMessageService.cs" />
+    <Compile Include="Common\MessageService.cs" />
     <Compile Include="Design\DesignOrderService.cs" />
     <Compile Include="Design\DesignUserService.cs" />
     <Compile Include="Services\IOrderService.cs" />
