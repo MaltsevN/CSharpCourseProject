@@ -1,0 +1,64 @@
+﻿<Window x:Class="OnlineShop.Client.Views.OrdersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:OnlineShop.Client.Views"
+        xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
+        mc:Ignorable="d"
+        Title="Orders" WindowStartupLocation="CenterScreen" FontSize="14">
+    <Window.Resources>
+        <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Mode="OneWay" Path="OrdersWindowViewModel" Source="{StaticResource locator}"/>
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" VerticalAlignment="Center" Text="{Binding NewOrderName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Button Grid.Column="1" Padding="16, 0" Margin="5" Command="{Binding AddNewOrderCommand, Mode=OneWay}">Add new order</Button>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,10,0">Search:</TextBlock>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </Grid>
+        <ListView Grid.Row="2" Margin="10,5" ItemsSource="{Binding Orders}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Placing date" Width="150" DisplayMemberBinding="{Binding PlacingDate}" />
+                    <GridViewColumn Header="Status" Width="150" DisplayMemberBinding="{Binding Status}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Padding="16, 0" Margin="5">Edit</Button>
+            <Button Padding="16, 0" Margin="5">Delete</Button>
+            <Button Padding="16, 0" Margin="5">Сheckout</Button>
+        </StackPanel>
+    </Grid>
+</Window>
