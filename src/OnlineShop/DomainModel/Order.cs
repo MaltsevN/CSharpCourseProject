@@ -15,6 +15,12 @@ namespace DomainModel
         public virtual Status Status { get; set; }
 
         public List<OrderItem> Items { get; set; }
+        public User User { get; set; }
+
+        public Order()
+        {
+            Items = new List<OrderItem>();
+        }
 
     }
 }
