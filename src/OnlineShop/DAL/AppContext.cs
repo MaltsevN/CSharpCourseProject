@@ -12,7 +12,7 @@ namespace DAL
 {
     public class AppContext : DbContext
     {
-        public AppContext(string stringConnection) : base(stringConnection)
+        public AppContext() : base("DefaultConnection")
         { }
 
         public DbSet<User> Users { get; set; }
