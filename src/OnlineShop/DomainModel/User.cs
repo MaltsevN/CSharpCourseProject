@@ -18,5 +18,7 @@ namespace DomainModel
 
         public virtual Rank Rank { get; set; }
 
+        public virtual List<Order> Orders { get; set; }
+
     }
 }

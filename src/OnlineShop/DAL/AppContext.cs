@@ -10,8 +10,11 @@ using System.Data.Entity;
 
 namespace DAL
 {
-    public class UserContext : DbContext
+    public class AppContext : DbContext
     {
+        public AppContext(string stringConnection) : base(stringConnection)
+        { }
+
         public DbSet<User> Users { get; set; }
     }
 }
