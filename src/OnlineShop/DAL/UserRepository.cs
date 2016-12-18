@@ -8,47 +8,45 @@ using DomainModel;
 
 namespace DAL
 {
-    public class UserRepository<T>: IRepository<T> where T: class
+    public class UserRepository : IRepository<User>
     {
-        DbContext _context;
-        DbSet<T> _dbSet;
+        private AppContext appContext;
 
-        public UserRepository(DbContext context)
+        public UserRepository()
         {
-            _context = context;
-            _dbSet = context.Set<T>();
+            appContext = new AppContext();
         }
 
-        public void Create(T item)
+        public void Create(User item)
         {
-            _dbSet.Add(item);
-
-        }
-        public void Update(T item)
-        {
-            _context.Entry(item).State = EntityState.Modified;
-
+            appContext.Users.Add(item);
         }
 
         public void Delete(int id)
         {
-            T item = _dbSet.Find(id);
-            if (item!=null) _dbSet.Remove(item);
+            User user = appContext.Users.Find(id);
+            if (user != null)
+                appContext.Users.Remove(user);
+        }
+
+        public User GetItem(int id)
+        {
+            return appContext.Users.Find(id);
+        }
+
+        public IEnumerable<User> GetItemsList()
+        {
+            return appContext.Users;
         }
 
         public void Save()
         {
-            _context.SaveChanges();
+            appContext.SaveChanges();
         }
 
-        public T GetItem(int id)
+        public void Update(User item)
         {
-            return _dbSet.Find(id);
-        }
-
-        public IEnumerable<T> GetItemsList()
-        {
-            return _dbSet.AsNoTracking().ToList();
+            appContext.Entry<User>(item).State = EntityState.Modified;
         }
     }
 }

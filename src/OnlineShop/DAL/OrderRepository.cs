@@ -9,47 +9,45 @@ using DomainModel;
 
 namespace DAL
 {
-        public class OrderRepository<T> : IRepository<T> where T : class
+    public class OrderRepository : IRepository<Order>
+    {
+        private AppContext appContext;
+
+        public OrderRepository()
         {
-            DbContext _context;
-            DbSet<T> _dbSet;
+            appContext = new AppContext();
+        }
 
-            public OrderRepository(DbContext context)
-            {
-                _context = context;
-                _dbSet = context.Set<T>();
-            }
+        public void Create(Order item)
+        {
+            appContext.Orders.Add(item);
+        }
 
-            public void Create(T item)
-            {
-                _dbSet.Add(item);
+        public void Delete(int id)
+        {
+            Order order = appContext.Orders.Find(id);
+            if (order != null)
+                appContext.Orders.Remove(order);
+        }
 
-            }
-            public void Update(T item)
-            {
-                _context.Entry(item).State = EntityState.Modified;
+        public Order GetItem(int id)
+        {
+            return appContext.Orders.Find(id);
+        }
 
-            }
+        public IEnumerable<Order> GetItemsList()
+        {
+            return appContext.Orders;
+        }
 
-            public void Delete(int id)
-            {
-                T item = _dbSet.Find(id);
-                if (item != null) _dbSet.Remove(item);
-            }
+        public void Save()
+        {
+            appContext.SaveChanges();
+        }
 
-            public void Save()
-            {
-                _context.SaveChanges();
-            }
-
-            public T GetItem(int id)
-            {
-                return _dbSet.Find(id);
-            }
-
-            public IEnumerable<T> GetItemsList()
-            {
-                return _dbSet.AsNoTracking().ToList();
-            }
+        public void Update(Order item)
+        {
+            appContext.Entry<Order>(item).State = EntityState.Modified;
+        }
     }
 }
