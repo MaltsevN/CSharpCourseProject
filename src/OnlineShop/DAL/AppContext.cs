@@ -12,6 +12,11 @@ namespace DAL
 {
     public class AppContext : DbContext
     {
+        static AppContext()
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppContext, Migrations.Configuration>());
+        }
+
         public AppContext() : base("DefaultConnection")
         { }
 
