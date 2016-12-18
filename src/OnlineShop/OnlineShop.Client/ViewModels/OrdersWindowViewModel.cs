@@ -151,9 +151,8 @@ namespace OnlineShop.Client.ViewModels
         private void UpdateData()
         {
             Orders.Clear();
-
-            var orders = orderService.GetOrders().Where(order => order.User == User);
-            foreach (var order in orders)
+            
+            foreach (var order in User.Orders)
             {
                 Orders.Add(order);
             }
