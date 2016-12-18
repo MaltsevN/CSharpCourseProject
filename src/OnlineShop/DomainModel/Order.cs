@@ -16,8 +16,5 @@ namespace DomainModel
 
         public List<OrderItem> Items { get; set; }
 
-        public virtual User User { get; set; }
-
-
     }
 }
