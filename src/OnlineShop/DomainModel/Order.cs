@@ -17,5 +17,10 @@ namespace DomainModel
         public List<OrderItem> Items { get; set; }
         public User User { get; set; }
 
+        public Order()
+        {
+            Items = new List<OrderItem>();
+        }
+
     }
 }
