@@ -8,13 +8,20 @@ using DomainModel;
 
 namespace OnlineShop.DAL.EntityFramework
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        public IRepository<Order> OrderRepository
+        private AppContext appContext = new AppContext();
+        private ProductRepository productRepository;
+        private UserRepository userRepository;
+        private OrderRepository orderRepository;
+
+        public IRepository<User> UserRepository
         {
             get
             {
-                throw new NotImplementedException();
+                if (userRepository == null)
+                    userRepository = new UserRepository(appContext);
+                return userRepository;
             }
         }
 
@@ -22,16 +29,45 @@ namespace OnlineShop.DAL.EntityFramework
         {
             get
             {
-                throw new NotImplementedException();
+                if (productRepository == null)
+                    productRepository = new ProductRepository(appContext);
+                return productRepository;
             }
         }
 
-        public IRepository<User> UserRepository
+        public IRepository<Order> OrderRepository
         {
             get
             {
-                throw new NotImplementedException();
+                if (orderRepository == null)
+                    orderRepository = new OrderRepository(appContext);
+                return orderRepository;
             }
+        }
+        
+        public void Save()
+        {
+            appContext.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    appContext.Dispose();
+                }
+                this.disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
