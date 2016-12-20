@@ -13,10 +13,10 @@ namespace OnlineShop.ServiceContracts
     public class ProductContract: IProductContract
     {
         IRepository<Product> product;
-
-        public ProductContract(IRepository<Product> product)
+        
+        public ProductContract(IUnitOfWork unitOfWork)
         {
-            this.product = product;
+            this.product = unitOfWork.ProductRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
