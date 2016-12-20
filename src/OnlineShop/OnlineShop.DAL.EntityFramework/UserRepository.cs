@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainModel;
+using DAL;
 
-namespace DAL
+namespace OnlineShop.DAL.EntityFramework
 {
     public class UserRepository : IRepository<User>
     {
