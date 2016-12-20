@@ -17,9 +17,9 @@ namespace DAL.Migrations
 
         protected override void Seed(DAL.AppContext context)
         {
-            Product iPhone = new Product() { Name = "Apple iPhone 7 128GB", Price = new ProductPrice() { Price = 749.0, EffecticeDate = new DateTime(2016, 10, 15) } };
-            Product pixel = new Product() { Name = "Google Pixel", Price = new ProductPrice() { Price = 649.0, EffecticeDate = new DateTime(2016, 9, 24) } };
-            Product galaxy = new Product() { Name = "Samsung Galaxy S7", Price = new ProductPrice() { Price = 599.0, EffecticeDate = new DateTime(2016, 5, 5) } };
+            Product iPhone = new Product() { Name = "Apple iPhone 7 128GB", Price = new ProductPrice() { Price = 749.0, EffectiveDate = new DateTime(2016, 10, 15) } };
+            Product pixel = new Product() { Name = "Google Pixel", Price = new ProductPrice() { Price = 649.0, EffectiveDate = new DateTime(2016, 9, 24) } };
+            Product galaxy = new Product() { Name = "Samsung Galaxy S7", Price = new ProductPrice() { Price = 599.0, EffectiveDate = new DateTime(2016, 5, 5) } };
 
             context.Products.AddOrUpdate(p => p.Name, iPhone, pixel, galaxy);
 
