@@ -16,9 +16,9 @@ namespace DomainModel
 
         public string Password { get; set; }
 
-        public virtual Rank Rank { get; set; }
+        public Rank Rank { get; set; }
 
-        public virtual List<Order> Orders { get; set; }
+        public List<Order> Orders { get; set; }
 
         public User()
         {
