@@ -12,7 +12,7 @@ namespace Test_AddAndPrintUser_
     {
         static void Main(string[] args)
         {
-            using (var db = new AppContext("DefaultConnection"))
+            using (var db = new AppContext())
             {
                 Console.Write("Enter a name for a new User: ");
                 var name = Console.ReadLine();
