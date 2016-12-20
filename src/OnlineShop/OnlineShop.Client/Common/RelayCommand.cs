@@ -7,10 +7,12 @@ using System.Windows.Input;
 
 namespace OnlineShop.Client.Common
 {
-    class RelayCommand : ICommand
+    class RelayCommand<TAction, TPredicate>  : ICommand 
+        where TAction : class
+        where TPredicate :class
     {
-        Action<object> execute;
-        Predicate<object> canExecute;
+        Action<TAction> execute;
+        Predicate<TPredicate> canExecute;
 
         public event EventHandler CanExecuteChanged
         {
@@ -24,7 +26,7 @@ namespace OnlineShop.Client.Common
             }
         }
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public RelayCommand(Action<TAction> execute, Predicate<TPredicate> canExecute)
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");
@@ -33,19 +35,19 @@ namespace OnlineShop.Client.Common
             this.canExecute = canExecute;
         }
 
-        public RelayCommand(Action<object> execute) : this(execute, null)
+        public RelayCommand(Action<TAction> execute) : this(execute, null)
         {
 
         }
 
         public bool CanExecute(object parameter)
         {
-            return canExecute == null ? true : canExecute.Invoke(parameter);
+            return canExecute == null ? true : canExecute.Invoke(parameter as TPredicate);
         }
 
         public void Execute(object parameter)
         {
-            execute.Invoke(parameter);
+            execute.Invoke(parameter as TAction);
         }
     }
 }

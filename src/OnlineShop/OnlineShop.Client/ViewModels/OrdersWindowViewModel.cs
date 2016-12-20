@@ -65,14 +65,14 @@ namespace OnlineShop.Client.ViewModels
         }
 
         #region AddNewOrderCommand
-        private RelayCommand addNewOrderCommand;
+        private RelayCommand<object, object> addNewOrderCommand;
 
         public ICommand AddNewOrderCommand
         {
             get
             {
                 if (addNewOrderCommand == null)
-                    addNewOrderCommand = new RelayCommand(AddNewOrderCommandExecute, AddNewOrderCommandCanExecute);
+                    addNewOrderCommand = new RelayCommand<object, object>(AddNewOrderCommandExecute, AddNewOrderCommandCanExecute);
 
                 return addNewOrderCommand;
             }
@@ -101,14 +101,14 @@ namespace OnlineShop.Client.ViewModels
         #endregion
 
         #region WindowLoadedCommand
-        private RelayCommand windowLoadedCommand;
+        private RelayCommand<object, object> windowLoadedCommand;
 
         public ICommand WindowLoadedCommand
         {
             get
             {
                 if (windowLoadedCommand == null)
-                    windowLoadedCommand = new RelayCommand(WindowLoadedCommandExecute);
+                    windowLoadedCommand = new RelayCommand<object, object>(WindowLoadedCommandExecute);
                 return windowLoadedCommand;
             }
         }
@@ -120,14 +120,14 @@ namespace OnlineShop.Client.ViewModels
         #endregion
 
         #region DeleteOrderCommand
-        private RelayCommand deleteOrderCommand;
+        private RelayCommand<object, object> deleteOrderCommand;
 
         public ICommand DeleteOrderCommand
         {
             get
             {
                 if (deleteOrderCommand == null)
-                    deleteOrderCommand = new RelayCommand(DeleteOrderCommandExecute, DeleteOrderCommandCanExecute);
+                    deleteOrderCommand = new RelayCommand<object, object>(DeleteOrderCommandExecute, DeleteOrderCommandCanExecute);
                 return deleteOrderCommand;
             }
         }
