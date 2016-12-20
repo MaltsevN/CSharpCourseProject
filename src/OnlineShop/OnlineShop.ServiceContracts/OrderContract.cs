@@ -14,9 +14,9 @@ namespace OnlineShop.ServiceContracts
     {
         IRepository<Order> order;
 
-        public OrderContract(IRepository<Order> order)
+        public OrderContract(IUnitOfWork unitOfWork)
         {
-            this.order = order;
+            this.order = unitOfWork.OrderRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]

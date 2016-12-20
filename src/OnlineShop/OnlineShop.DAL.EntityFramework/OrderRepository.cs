@@ -18,6 +18,11 @@ namespace OnlineShop.DAL.EntityFramework
             appContext = new AppContext();
         }
 
+        public OrderRepository(AppContext appContext)
+        {
+            this.appContext = appContext;
+        }
+
         public void Create(Order item)
         {
             appContext.Orders.Add(item);

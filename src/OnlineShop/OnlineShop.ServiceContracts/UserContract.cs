@@ -14,9 +14,9 @@ namespace OnlineShop.ServiceContracts
     {
         IRepository<User> user;
 
-        public UserContract(IRepository<User> user)
+        public UserContract(IUnitOfWork unitOfWork)
         {
-            this.user = user;
+            this.user = unitOfWork.UserRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
