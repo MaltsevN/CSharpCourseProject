@@ -18,29 +18,34 @@ namespace OnlineShop.ServiceContracts
         {
             this.user = user;
         }
-        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Create", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Create(User item)
         {
             user.Create(item);
             user.Save();
         }
-        [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Delete", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+
+        [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
             user.Delete(id);
             user.Save();
         }
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetItem/{id}", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+
+        [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetUser/{id}")]
         public User GetItem(string id)
         {
             return user.GetItem(Convert.ToInt32(id));
         }
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetItemsList", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+
+        [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllUsers")]
         public IEnumerable<User> GetItemsList()
         {
             return user.GetItemsList();
         }
-        [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "Update", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+
+        [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(User item)
         {
             user.Update(item);
