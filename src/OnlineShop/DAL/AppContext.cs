@@ -18,7 +18,10 @@ namespace DAL
         }
 
         public AppContext() : base("DefaultConnection")
-        { }
+        {
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
