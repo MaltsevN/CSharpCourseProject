@@ -37,12 +37,12 @@ namespace OnlineShop.DAL.EntityFramework
 
         public User GetItem(int id)
         {
-            return appContext.Users.Find(id);
+            return appContext.Users.Include(us => us.Orders.Select(or => or.Items.Select(p => p.Product.Price))).FirstOrDefault(us => us.Id == id);
         }
 
         public IEnumerable<User> GetItemsList()
         {
-            return appContext.Users;
+            return appContext.Users.Include(us => us.Orders.Select(or => or.Items.Select(p => p.Product.Price)));
         }
 
         public void Save()
