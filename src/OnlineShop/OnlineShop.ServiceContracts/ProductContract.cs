@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.ServiceContracts
 {
-    class ProductContract: IProductContract
+    public class ProductContract: IProductContract
     {
         IRepository<Product> product;
 
