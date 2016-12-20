@@ -29,8 +29,8 @@ namespace OnlineShop.Client.ViewModels
 
             //Desing Data
 
-            Design.DesignUserService userService = new Design.DesignUserService();
-            User user = userService.GetUser(0);
+            IUserService userService = new UserService();
+            User user = userService.GetUser(1);
             builder.RegisterType<OrdersWindowViewModel>().WithProperty("User", user);
             //
 
