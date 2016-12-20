@@ -42,9 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IProductContract.cs" />
     <Compile Include="IUserContract.cs" />
     <Compile Include="IOrderContract.cs" />
     <Compile Include="OrderContract.cs" />
+    <Compile Include="ProductContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserContract.cs" />
   </ItemGroup>
