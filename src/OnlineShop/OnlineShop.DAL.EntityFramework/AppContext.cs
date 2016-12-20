@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 
 
-namespace DAL
+namespace OnlineShop.DAL.EntityFramework
 {
     public class AppContext : DbContext
     {

@@ -11,6 +11,7 @@ using Autofac;
 using Autofac.Integration.Wcf;
 using DAL;
 using DomainModel;
+using OnlineShop.DAL.EntityFramework;
 
 namespace OnlineShop.Server
 {
@@ -23,8 +24,7 @@ namespace OnlineShop.Server
             builder.RegisterType<OrderContract>();
             builder.RegisterType<UserContract>();
 
-            builder.RegisterType<OrderRepository>().As<IRepository<Order>>();
-            builder.RegisterType<UserRepository>().As<IRepository<User>>();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
             AutofacHostFactory.Container = builder.Build();
 
