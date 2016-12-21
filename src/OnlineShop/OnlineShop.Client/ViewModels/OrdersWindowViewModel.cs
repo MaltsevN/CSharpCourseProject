@@ -16,7 +16,7 @@ namespace OnlineShop.Client.ViewModels
     class OrdersWindowViewModel : BaseViewModel
     {
         private IOrderService orderService;
-        private IMessageService messageService;
+        private IMessegeManager messageService;
         private ICollectionView collectionView;
 
         private string searchString = string.Empty;
@@ -43,7 +43,7 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        public OrdersWindowViewModel(IOrderService orderService, IMessageService messageService)
+        public OrdersWindowViewModel(IOrderService orderService, IMessegeManager messageService)
         {
             this.orderService = orderService;
             this.messageService = messageService;
