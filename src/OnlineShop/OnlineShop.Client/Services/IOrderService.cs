@@ -9,7 +9,7 @@ namespace OnlineShop.Client.Services
 {
     interface IOrderService
     {
-        void Create(Order order);
+        Order Create(Order order);
         void Delete(int id);
         Order GetOrder(int id);
         IEnumerable<Order> GetOrders();

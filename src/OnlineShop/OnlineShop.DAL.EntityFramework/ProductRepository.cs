@@ -22,9 +22,9 @@ namespace OnlineShop.DAL.EntityFramework
             this.appContext = appContext;
         }
 
-        public void Create(Product item)
+        public Product Create(Product item)
         {
-            appContext.Products.Add(item);
+            return appContext.Products.Add(item);
         }
 
         public void Delete(int id)

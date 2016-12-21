@@ -23,9 +23,9 @@ namespace OnlineShop.DAL.EntityFramework
             this.appContext = appContext;
         }
 
-        public void Create(Order item)
+        public Order Create(Order item)
         {
-            appContext.Orders.Add(item);
+            return appContext.Orders.Add(item);
         }
 
         public void Delete(int id)

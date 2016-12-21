@@ -33,7 +33,7 @@ namespace OnlineShop.Client.Design
             });
         }
 
-        public void Create(User user)
+        public User Create(User user)
         {
             throw new NotImplementedException();
         }

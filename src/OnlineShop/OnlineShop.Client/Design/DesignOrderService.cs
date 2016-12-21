@@ -68,11 +68,12 @@ namespace OnlineShop.Client.Design
             orders.Add(order4);
         }
 
-        public void Create(Order order)
+        public Order Create(Order order)
         {
             order.Id = orders.Count;
             orders.Add(order);
             order.User.Orders.Add(order);
+            return order;
         }
 
         public void Delete(int id)

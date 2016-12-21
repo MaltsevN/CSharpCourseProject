@@ -22,7 +22,7 @@ namespace OnlineShop.Client.Services
             client = new HttpClient();
         }
 
-        public void Create(User user)
+        public User Create(User user)
         {
             throw new NotImplementedException();
         }

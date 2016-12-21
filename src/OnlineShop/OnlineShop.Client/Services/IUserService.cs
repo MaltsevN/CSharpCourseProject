@@ -9,7 +9,7 @@ namespace OnlineShop.Client.Services
 {
     interface IUserService
     {
-        void Create(User user);
+        User Create(User user);
         void Delete(int id);
         User GetUser(int id);
         IEnumerable<User> GetUsers();
