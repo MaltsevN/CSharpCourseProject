@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace OnlineShop.Client.Common
 {
-    class MessageService : IMessageService
+    class MessegeManager : IMessegeManager
     {
         public MessageBoxResult ShowMessage(string message, string header, MessageBoxButton button, MessageBoxImage icon)
         {

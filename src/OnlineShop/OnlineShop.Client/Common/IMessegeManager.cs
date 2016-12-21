@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Client.Common
 {
-    internal interface IMessageService
+    internal interface IMessegeManager
     {
         MessageBoxResult ShowMessage(string message, string header, MessageBoxButton button, MessageBoxImage icon);
     }
