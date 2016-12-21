@@ -18,13 +18,25 @@ namespace OnlineShop.Client.ViewModels
         private IOrderService orderService;
         private IMessegeManager messageService;
         private ICollectionView collectionView;
-        
+
 
         public ObservableCollection<Order> Orders { get; private set; }
 
         public User User { get; set; }
 
-        public string NewOrderName { get; set; }
+        private string newOrderName = string.Empty;
+        public string NewOrderName
+        {
+            get
+            {
+                return newOrderName;
+            }
+            set
+            {
+                newOrderName = value;
+                OnPropertyChanged(nameof(NewOrderName));
+            }
+        }
 
         private Order selectedOrder;
         public Order SelectedOrder
