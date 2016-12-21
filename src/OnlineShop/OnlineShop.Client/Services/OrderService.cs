@@ -66,7 +66,9 @@ namespace OnlineShop.Client.Services
 
         public void Update(Order order)
         {
-            throw new NotImplementedException();
+            string jsonRequest = JsonConvert.SerializeObject(order);
+            string requestUri = Properties.Resources.UrlToServer + "Order/Update";
+            var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
         }
     }
 }

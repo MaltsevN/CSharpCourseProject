@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:OnlineShop.Client.Views"
         xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
+        xmlns:domainModel="clr-namespace:DomainModel;assembly=DomainModel"
         mc:Ignorable="d"
         Title="Orders" WindowStartupLocation="CenterScreen" FontSize="14">
     <Window.Resources>
@@ -58,7 +59,49 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
             <Button Padding="16, 0" Margin="5">Edit</Button>
             <Button Padding="16, 0" Margin="5" Command="{Binding DeleteOrderCommand, Mode=OneWay}">Delete</Button>
-            <Button Padding="16, 0" Margin="5">Сheckout</Button>
+            <Button Padding="16, 0" Margin="5" Content="Submit order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.NotDecorated}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Cancelled}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Confirmed}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Processing}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Padding="16, 0" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.NotDecorated}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Cancelled}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Confirmed}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Processing}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
