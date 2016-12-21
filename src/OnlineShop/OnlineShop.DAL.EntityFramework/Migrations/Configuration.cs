@@ -41,7 +41,7 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
             {
                 Id = 2,
                 Name = "Order #2",
-                Status = Status.NotDecorated,
+                Status = Status.Processing,
                 PlacingDate = DateTime.UtcNow,
                 Items = new List<OrderItem>()
                 {
@@ -49,10 +49,34 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 }
             };
 
+            Order order3 = new Order()
+            {
+                Id = 3,
+                Name = "Order #3",
+                Status = Status.Confirmed,
+                PlacingDate = DateTime.UtcNow,
+                Items = new List<OrderItem>()
+                {
+                    new OrderItem() { Product = pixel, Quantity = 2 }
+                }
+            };
+
+            Order order4 = new Order()
+            {
+                Id = 4,
+                Name = "Order #4",
+                Status = Status.Cancelled,
+                PlacingDate = DateTime.UtcNow,
+                Items = new List<OrderItem>()
+                {
+                    new OrderItem() { Product = pixel, Quantity = 3 }
+                }
+            };
+
             if (context.Users.FirstOrDefault(u => u.Login == "TestUser") == null)
             {
                 context.Users.AddOrUpdate(u => u.Id,
-                    new User() { Id = 1, Login = "TestUser", Name = "User", Password = "testpassword", Rank = Rank.Client, Orders = new List<Order>() { order1, order2 } });
+                    new User() { Id = 1, Login = "TestUser", Name = "User", Password = "testpassword", Rank = Rank.Client, Orders = new List<Order>() { order1, order2, order3, order4 } });
             }
             context.SaveChanges();
         }
