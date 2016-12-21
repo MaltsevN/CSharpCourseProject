@@ -89,12 +89,14 @@ namespace OnlineShop.Client.ViewModels
             {
                 Name = NewOrderName,
                 Status = Status.NotDecorated,
-                User = User,
+                UserId = User.Id,
                 PlacingDate = DateTime.UtcNow
             };
 
-            orderService.Create(newOrder);
-            UpdateData();
+            
+            Order order = orderService.Create(newOrder);
+            User.Orders.Add(order);
+            Orders.Add(order);
             NewOrderName = string.Empty;
         }
 
@@ -115,7 +117,10 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
-            UpdateData();
+            foreach (var order in User.Orders)
+            {
+                Orders.Add(order);
+            }
         }
         #endregion
 
@@ -138,7 +143,8 @@ namespace OnlineShop.Client.ViewModels
             if (result == System.Windows.MessageBoxResult.Yes)
             {
                 orderService.Delete(SelectedOrder.Id);
-                UpdateData();
+                User.Orders.Remove(SelectedOrder);
+                Orders.Remove(SelectedOrder);
             } 
         }
 
@@ -147,15 +153,5 @@ namespace OnlineShop.Client.ViewModels
             return SelectedOrder != null && SelectedOrder.Status == Status.NotDecorated;
         }
         #endregion
-
-        private void UpdateData()
-        {
-            Orders.Clear();
-            
-            foreach (var order in User.Orders)
-            {
-                Orders.Add(order);
-            }
-        }
     }
 }
