@@ -75,6 +75,7 @@
     <Compile Include="Design\DesignUserService.cs" />
     <Compile Include="Services\IOrderService.cs" />
     <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\OrdersWindowViewModel.cs" />

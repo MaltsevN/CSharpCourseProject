@@ -12,44 +12,45 @@ namespace OnlineShop.ServiceContracts
 {
     public class ProductContract: IProductContract
     {
-        IRepository<Product> product;
+        IRepository<Product> productRepository;
         
         public ProductContract(IUnitOfWork unitOfWork)
         {
-            this.product = unitOfWork.ProductRepository;
+            this.productRepository = unitOfWork.ProductRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public void Create(Product item)
+        public Product Create(Product item)
         {
-            product.Create(item);
-            product.Save();
+            Product product = productRepository.Create(item);
+            productRepository.Save();
+            return product;
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
-            product.Delete(id);
-            product.Save();
+            productRepository.Delete(id);
+            productRepository.Save();
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetProduct/{id}")]
         public Product GetItem(string id)
         {
-            return product.GetItem(Convert.ToInt32(id));
+            return productRepository.GetItem(Convert.ToInt32(id));
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllProducts")]
         public IEnumerable<Product> GetItemsList()
         {
-            return product.GetItemsList();
+            return productRepository.GetItemsList();
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(Product item)
         {
-            product.Update(item);
-            product.Save();
+            productRepository.Update(item);
+            productRepository.Save();
         }
     }
 }

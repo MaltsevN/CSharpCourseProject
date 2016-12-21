@@ -8,7 +8,7 @@ namespace DAL
 {
     public interface IRepository<T> where T : class
     {
-        void Create(T item);
+        T Create(T item);
         void Delete(int id);
         T GetItem(int id);
         IEnumerable<T> GetItemsList();

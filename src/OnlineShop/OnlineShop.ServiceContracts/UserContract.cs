@@ -12,44 +12,45 @@ namespace OnlineShop.ServiceContracts
 {
     public class UserContract : IUserContract
     {
-        IRepository<User> user;
+        IRepository<User> userRepository;
 
         public UserContract(IUnitOfWork unitOfWork)
         {
-            this.user = unitOfWork.UserRepository;
+            this.userRepository = unitOfWork.UserRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public void Create(User item)
+        public User Create(User item)
         {
-            user.Create(item);
-            user.Save();
+            User user = userRepository.Create(item);
+            userRepository.Save();
+            return user;
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
-            user.Delete(id);
-            user.Save();
+            userRepository.Delete(id);
+            userRepository.Save();
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetUser/{id}")]
         public User GetItem(string id)
         {
-            return user.GetItem(Convert.ToInt32(id));
+            return userRepository.GetItem(Convert.ToInt32(id));
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllUsers")]
         public IEnumerable<User> GetItemsList()
         {
-            return user.GetItemsList();
+            return userRepository.GetItemsList();
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(User item)
         {
-            user.Update(item);
-            user.Save();
+            userRepository.Update(item);
+            userRepository.Save();
         }
     }
 }

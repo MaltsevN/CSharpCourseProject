@@ -18,8 +18,7 @@ namespace OnlineShop.Client.ViewModels
         private IOrderService orderService;
         private IMessegeManager messageService;
         private ICollectionView collectionView;
-
-        private string searchString = string.Empty;
+        
 
         public ObservableCollection<Order> Orders { get; private set; }
 
@@ -27,8 +26,21 @@ namespace OnlineShop.Client.ViewModels
 
         public string NewOrderName { get; set; }
 
-        public Order SelectedOrder { get; set; }
+        private Order selectedOrder;
+        public Order SelectedOrder
+        {
+            get
+            {
+                return selectedOrder;
+            }
+            set
+            {
+                selectedOrder = value;
+                OnPropertyChanged(nameof(SelectedOrder));
+            }
+        }
 
+        private string searchString = string.Empty;
         public string SearchString
         {
             get
@@ -89,12 +101,14 @@ namespace OnlineShop.Client.ViewModels
             {
                 Name = NewOrderName,
                 Status = Status.NotDecorated,
-                User = User,
+                UserId = User.Id,
                 PlacingDate = DateTime.UtcNow
             };
 
-            orderService.Create(newOrder);
-            UpdateData();
+
+            Order order = orderService.Create(newOrder);
+            User.Orders.Add(order);
+            Orders.Add(order);
             NewOrderName = string.Empty;
         }
 
@@ -115,7 +129,10 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
-            UpdateData();
+            foreach (var order in User.Orders)
+            {
+                Orders.Add(order);
+            }
         }
         #endregion
 
@@ -138,8 +155,9 @@ namespace OnlineShop.Client.ViewModels
             if (result == System.Windows.MessageBoxResult.Yes)
             {
                 orderService.Delete(SelectedOrder.Id);
-                UpdateData();
-            } 
+                User.Orders.Remove(SelectedOrder);
+                Orders.Remove(SelectedOrder);
+            }
         }
 
         private bool DeleteOrderCommandCanExecute(object obj)
@@ -148,14 +166,56 @@ namespace OnlineShop.Client.ViewModels
         }
         #endregion
 
-        private void UpdateData()
+        #region ConfirmOrderCommand
+        private RelayCommand<object, object> confirmOrderCommand;
+        public ICommand ConfirmOrderCommand
         {
-            Orders.Clear();
-            
-            foreach (var order in User.Orders)
+            get
             {
-                Orders.Add(order);
+                if (confirmOrderCommand == null)
+                    confirmOrderCommand = new RelayCommand<object, object>(ConfirmOrderCommandExecute, ConfirmOrderCommandCanExecute);
+                return confirmOrderCommand;
             }
         }
+
+        private void ConfirmOrderCommandExecute(object obj)
+        {
+            SelectedOrder.Status = Status.Processing;
+            orderService.Update(SelectedOrder);
+            CollectionViewSource.GetDefaultView(Orders).Refresh();
+            OnPropertyChanged(nameof(SelectedOrder));
+        }
+
+        private bool ConfirmOrderCommandCanExecute(object obj)
+        {
+            return SelectedOrder != null && SelectedOrder.Status == Status.NotDecorated;
+        }
+        #endregion
+
+        #region CancelOrderCommand
+        private RelayCommand<object, object> cancelOrderCommand;
+        public ICommand CancelOrderCommand
+        {
+            get
+            {
+                if (cancelOrderCommand == null)
+                    cancelOrderCommand = new RelayCommand<object, object>(CancelOrderCommandExecute, CancelOrderCommandCanExecute);
+                return cancelOrderCommand;
+            }
+        }
+
+        private void CancelOrderCommandExecute(object obj)
+        {
+            SelectedOrder.Status = Status.NotDecorated;
+            orderService.Update(SelectedOrder);
+            CollectionViewSource.GetDefaultView(Orders).Refresh();
+            OnPropertyChanged(nameof(SelectedOrder));
+        }
+
+        private bool CancelOrderCommandCanExecute(object obj)
+        {
+            return SelectedOrder != null && SelectedOrder.Status == Status.Processing;
+        }
+        #endregion
     }
 }

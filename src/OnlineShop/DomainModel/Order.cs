@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -26,6 +27,10 @@ namespace DomainModel
         public List<OrderItem> Items { get; set; }
 
         [DataMember]
+        public int UserId { get; set; }
+
+        [DataMember]
+        [ForeignKey("UserId")]
         public User User { get; set; }
 
         public Order()
