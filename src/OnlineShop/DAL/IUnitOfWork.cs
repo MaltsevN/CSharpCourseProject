@@ -12,5 +12,6 @@ namespace DAL
         IRepository<User> UserRepository { get; }
         IRepository<Product> ProductRepository { get; }
         IRepository<Order> OrderRepository { get; }
+        IRepository<OrderItem> OrderItemRepository { get; }
     }
 }
