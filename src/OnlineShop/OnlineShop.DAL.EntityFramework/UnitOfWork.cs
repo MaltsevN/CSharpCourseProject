@@ -14,6 +14,7 @@ namespace OnlineShop.DAL.EntityFramework
         private ProductRepository productRepository;
         private UserRepository userRepository;
         private OrderRepository orderRepository;
+        private OrderItemRepository orderItemRepository;
 
         public IRepository<User> UserRepository
         {
@@ -42,6 +43,16 @@ namespace OnlineShop.DAL.EntityFramework
                 if (orderRepository == null)
                     orderRepository = new OrderRepository(appContext);
                 return orderRepository;
+            }
+        }
+
+        public IRepository<OrderItem> OrderItemRepository
+        {
+            get
+            {
+                if (orderItemRepository == null)
+                    orderItemRepository = new OrderItemRepository(appContext);
+                return orderItemRepository;
             }
         }
         

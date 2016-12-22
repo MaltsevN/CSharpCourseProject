@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AppContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="OrderItemRepository.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="ProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
