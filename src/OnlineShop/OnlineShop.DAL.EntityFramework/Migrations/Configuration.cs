@@ -32,8 +32,8 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 PlacingDate = DateTime.UtcNow,
                 Items = new List<OrderItem>()
                 {
-                    new OrderItem() { Product = iPhone, Quantity = 2 },
-                    new OrderItem() { Product = galaxy, Quantity = 1 }
+                    new OrderItem() { ProductId = iPhone.Id, Product = iPhone, Quantity = 2 },
+                    new OrderItem() { ProductId = galaxy.Id, Product = galaxy, Quantity = 1 }
                 }
             };
 
@@ -45,7 +45,7 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 PlacingDate = DateTime.UtcNow,
                 Items = new List<OrderItem>()
                 {
-                    new OrderItem() { Product = pixel, Quantity = 1 }
+                    new OrderItem() { ProductId = pixel.Id, Product = pixel, Quantity = 1 }
                 }
             };
 
@@ -57,7 +57,7 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 PlacingDate = DateTime.UtcNow,
                 Items = new List<OrderItem>()
                 {
-                    new OrderItem() { Product = pixel, Quantity = 2 }
+                    new OrderItem() { ProductId = pixel.Id, Product = pixel, Quantity = 2 }
                 }
             };
 
@@ -69,7 +69,7 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 PlacingDate = DateTime.UtcNow,
                 Items = new List<OrderItem>()
                 {
-                    new OrderItem() { Product = pixel, Quantity = 3 }
+                    new OrderItem() { ProductId = pixel.Id, Product = pixel, Quantity = 3 }
                 }
             };
 

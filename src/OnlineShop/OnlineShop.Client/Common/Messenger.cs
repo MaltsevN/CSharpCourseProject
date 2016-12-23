@@ -61,7 +61,7 @@ namespace OnlineShop.Client.Common
 
             IEnumerable<KeyValuePair<MessengerKey, object>> result = dictionary.Where(keyValuePair => keyValuePair.Key.Key.Equals(key));
 
-            foreach (var action in result.Select(x => x.Value).OfType<Action<T>>())
+            foreach (var action in result.Select(x => x.Value).OfType<Action<T>>().ToList())
             {
                 action(message);
             }

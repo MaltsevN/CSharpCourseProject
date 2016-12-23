@@ -23,9 +23,15 @@ namespace OnlineShop.Client.ViewModels
         static void ConfigureContainer()
         {
             var builder = new ContainerBuilder();
+
             builder.RegisterType<OrderService>().As<IOrderService>();
+            builder.RegisterType<ProductService>().As<IProductService>();
+            builder.RegisterType<OrderItemService>().As<IOrderItemService>();
+
             builder.RegisterType<MessegeManager>().As<IMessegeManager>();
+
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
+            builder.RegisterType<EditOrderWindowViewModel>().AsSelf();
 
             //Desing Data
 
@@ -51,6 +57,14 @@ namespace OnlineShop.Client.ViewModels
             get
             {
                 return container.Resolve<OrdersWindowViewModel>();
+            }
+        }
+
+        public EditOrderWindowViewModel EditOrderWindowViewModel
+        {
+            get
+            {
+                return container.Resolve<EditOrderWindowViewModel>();
             }
         }
     }

@@ -18,13 +18,27 @@ namespace OnlineShop.Client.ViewModels
         private IOrderService orderService;
         private IMessegeManager messageService;
         private ICollectionView collectionView;
-        
+
+        private Order clonedOrder;
+
 
         public ObservableCollection<Order> Orders { get; private set; }
 
         public User User { get; set; }
 
-        public string NewOrderName { get; set; }
+        private string newOrderName = string.Empty;
+        public string NewOrderName
+        {
+            get
+            {
+                return newOrderName;
+            }
+            set
+            {
+                newOrderName = value;
+                OnPropertyChanged(nameof(NewOrderName));
+            }
+        }
 
         private Order selectedOrder;
         public Order SelectedOrder
@@ -62,6 +76,18 @@ namespace OnlineShop.Client.ViewModels
             Orders = new ObservableCollection<Order>();
             collectionView = CollectionViewSource.GetDefaultView(Orders);
             collectionView.Filter = SearchFilter;
+            Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingEditOrderWindow, ClosingEditOrderWindow);
+        }
+
+        private void ClosingEditOrderWindow(bool? dialogResult)
+        {
+            if(dialogResult == true)
+            {
+                Order order = Orders.First(o => o.Id == clonedOrder.Id);
+                order.Items = clonedOrder.Items;
+                SelectedOrder = order;
+                CollectionViewSource.GetDefaultView(Orders).Refresh();
+            }
         }
 
         private bool SearchFilter(object obj)
@@ -107,8 +133,11 @@ namespace OnlineShop.Client.ViewModels
 
 
             Order order = orderService.Create(newOrder);
+            order.User = User;
             User.Orders.Add(order);
             Orders.Add(order);
+            clonedOrder = ObjectCopier.Clone<Order>(order);
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
             NewOrderName = string.Empty;
         }
 
@@ -216,6 +245,33 @@ namespace OnlineShop.Client.ViewModels
         {
             return SelectedOrder != null && SelectedOrder.Status == Status.Processing;
         }
+        #endregion
+
+        #region EditOrderCommand
+        private RelayCommand<object, object> editOrderCommand;
+
+        public ICommand EditOrderCommand
+        {
+            get
+            {
+                if (editOrderCommand == null)
+                    editOrderCommand = new RelayCommand<object, object>(EditOrderCommandExecute, EditOrderCommandCanExecute);
+
+                return editOrderCommand;
+            }
+        }
+
+        private bool EditOrderCommandCanExecute(object obj)
+        {
+            return SelectedOrder != null;
+        }
+
+        private void EditOrderCommandExecute(object obj)
+        {
+            clonedOrder = ObjectCopier.Clone<Order>(SelectedOrder);
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+        }
+
         #endregion
     }
 }
