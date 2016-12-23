@@ -18,6 +18,10 @@ namespace DomainModel
         public int Quantity { get; set; }
 
         [DataMember]
+        public int ProductId { get; set; }
+
+        [DataMember]
+        [ForeignKey("ProductId")]
         public Product Product { get; set; }
 
         [DataMember]
