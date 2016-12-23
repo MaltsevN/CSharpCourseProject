@@ -119,9 +119,11 @@ namespace OnlineShop.Client.ViewModels
 
 
             Order order = orderService.Create(newOrder);
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEtitOrderWindow, newOrder);
             User.Orders.Add(order);
             Orders.Add(order);
             NewOrderName = string.Empty;
+            CollectionViewSource.GetDefaultView(Orders).Refresh();
         }
 
         #endregion
@@ -228,6 +230,33 @@ namespace OnlineShop.Client.ViewModels
         {
             return SelectedOrder != null && SelectedOrder.Status == Status.Processing;
         }
+        #endregion
+
+        #region EditOrderCommand
+        private RelayCommand<object, object> editOrderCommand;
+
+        public ICommand EditOrderCommand
+        {
+            get
+            {
+                if (editOrderCommand == null)
+                    editOrderCommand = new RelayCommand<object, object>(EditOrderCommandExecute, EditOrderCommandCanExecute);
+
+                return editOrderCommand;
+            }
+        }
+
+        private bool EditOrderCommandCanExecute(object obj)
+        {
+            return SelectedOrder != null;
+        }
+
+        private void EditOrderCommandExecute(object obj)
+        {
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEtitOrderWindow, SelectedOrder);
+            CollectionViewSource.GetDefaultView(Orders).Refresh();
+        }
+
         #endregion
     }
 }

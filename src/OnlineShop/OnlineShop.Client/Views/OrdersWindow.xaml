@@ -57,7 +57,7 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="16, 0" Margin="5">Edit</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding EditOrderCommand, Mode=OneWay}">Edit</Button>
             <Button Padding="16, 0" Margin="5" Command="{Binding DeleteOrderCommand, Mode=OneWay}">Delete</Button>
             <Button Padding="16, 0" Margin="5" Content="Submit order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
                 <Button.Style>

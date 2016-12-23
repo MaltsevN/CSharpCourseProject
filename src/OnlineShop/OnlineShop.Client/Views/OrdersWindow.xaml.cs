@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnlineShop.Client.Common;
+using DomainModel;
+using OnlineShop.Client.ViewModels;
 
 namespace OnlineShop.Client.Views
 {
@@ -22,6 +25,15 @@ namespace OnlineShop.Client.Views
         public OrdersWindow()
         {
             InitializeComponent();
+            Messenger.Default.Register<WindowMessege, Order>(this, WindowMessege.OpenEtitOrderWindow, OpenEtitOrderWindow);
+        }
+
+        private void OpenEtitOrderWindow(Order order)
+        {
+            EditOrderWindow window = new EditOrderWindow();
+            var viewModel = (EditOrderWindowViewModel)window.DataContext;
+            viewModel.Order = order;
+            window.ShowDialog();
         }
     }
 }

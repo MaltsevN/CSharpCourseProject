@@ -71,6 +71,7 @@
     <Compile Include="Common\IMessegeManager.cs" />
     <Compile Include="Common\MessegeManager.cs" />
     <Compile Include="Common\Messenger.cs" />
+    <Compile Include="Common\WindowMessege.cs" />
     <Compile Include="Design\DesignOrderService.cs" />
     <Compile Include="Design\DesignUserService.cs" />
     <Compile Include="Models\CheckableItem.cs" />
