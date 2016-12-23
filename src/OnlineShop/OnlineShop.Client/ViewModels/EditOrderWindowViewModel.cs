@@ -56,7 +56,7 @@ namespace OnlineShop.Client.ViewModels
         {
             foreach (Product product in productService.GetProducts())
             {
-                OrderItem orderItem = Order.Items.Find(item => item.Product.Equals(product));
+                OrderItem orderItem = Order.Items.Find(item => item.Product.Id == product.Id);
                 if (orderItem != null)
                 {
                     OrderItems.Add(new CheckableItem<OrderItem>(orderItem)
