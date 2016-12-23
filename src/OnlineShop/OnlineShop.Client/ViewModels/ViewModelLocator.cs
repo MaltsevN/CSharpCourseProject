@@ -26,6 +26,7 @@ namespace OnlineShop.Client.ViewModels
 
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<ProductService>().As<IProductService>();
+            builder.RegisterType<OrderItemService>().As<IOrderItemService>();
 
             builder.RegisterType<MessegeManager>().As<IMessegeManager>();
 
