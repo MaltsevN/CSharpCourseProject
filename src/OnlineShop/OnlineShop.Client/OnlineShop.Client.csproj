@@ -73,11 +73,17 @@
     <Compile Include="Common\Messenger.cs" />
     <Compile Include="Design\DesignOrderService.cs" />
     <Compile Include="Design\DesignUserService.cs" />
+    <Compile Include="Models\CheckableItem.cs" />
+    <Compile Include="Services\IOrderItemService.cs" />
     <Compile Include="Services\IOrderService.cs" />
+    <Compile Include="Services\IProductService.cs" />
     <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\OrderItemService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\EditOrderWindowViewModel.cs" />
     <Compile Include="ViewModels\OrdersWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\EditOrderWindow.xaml.cs">
@@ -116,9 +122,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\EditOrderWindow.xaml">
       <SubType>Designer</SubType>

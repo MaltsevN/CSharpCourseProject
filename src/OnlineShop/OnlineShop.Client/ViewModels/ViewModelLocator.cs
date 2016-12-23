@@ -31,6 +31,7 @@ namespace OnlineShop.Client.ViewModels
             builder.RegisterType<MessegeManager>().As<IMessegeManager>();
 
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
+            builder.RegisterType<EditOrderWindowViewModel>().AsSelf();
 
             //Desing Data
 
@@ -56,6 +57,14 @@ namespace OnlineShop.Client.ViewModels
             get
             {
                 return container.Resolve<OrdersWindowViewModel>();
+            }
+        }
+
+        public EditOrderWindowViewModel EditOrderWindowViewModel
+        {
+            get
+            {
+                return container.Resolve<EditOrderWindowViewModel>();
             }
         }
     }
