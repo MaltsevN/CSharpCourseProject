@@ -23,8 +23,12 @@ namespace OnlineShop.Client.ViewModels
         static void ConfigureContainer()
         {
             var builder = new ContainerBuilder();
+
             builder.RegisterType<OrderService>().As<IOrderService>();
+            builder.RegisterType<ProductService>().As<IProductService>();
+
             builder.RegisterType<MessegeManager>().As<IMessegeManager>();
+
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
 
             //Desing Data
