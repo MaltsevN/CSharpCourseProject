@@ -25,7 +25,7 @@ namespace OnlineShop.Client.Views
         public OrdersWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<WindowMessege, Order>(this, WindowMessege.OpenEtitOrderWindow, OpenEtitOrderWindow);
+            Messenger.Default.Register<WindowMessege, Order>(this, WindowMessege.OpenEditOrderWindow, OpenEtitOrderWindow);
         }
 
         private void OpenEtitOrderWindow(Order order)

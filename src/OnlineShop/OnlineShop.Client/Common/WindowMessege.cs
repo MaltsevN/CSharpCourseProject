@@ -8,7 +8,8 @@ namespace OnlineShop.Client.Common
 {
     enum WindowMessege
     {
-        OpenEtitOrderWindow,
-        CloseEtitOrderWindow
+        OpenEditOrderWindow,
+        CloseEditOrderWindow,
+        ClosingEditOrderWindow
     }
 }

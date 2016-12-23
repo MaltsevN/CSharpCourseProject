@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:OnlineShop.Client.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="Edit order" WindowStartupLocation="CenterScreen"  FontSize="14">
+        Title="Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
     </Window.Resources>

@@ -19,6 +19,8 @@ namespace OnlineShop.Client.ViewModels
         private IMessegeManager messageService;
         private ICollectionView collectionView;
 
+        private Order clonedOrder;
+
 
         public ObservableCollection<Order> Orders { get; private set; }
 
@@ -74,6 +76,18 @@ namespace OnlineShop.Client.ViewModels
             Orders = new ObservableCollection<Order>();
             collectionView = CollectionViewSource.GetDefaultView(Orders);
             collectionView.Filter = SearchFilter;
+            Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingEditOrderWindow, ClosingEditOrderWindow);
+        }
+
+        private void ClosingEditOrderWindow(bool? dialogResult)
+        {
+            if(dialogResult == true)
+            {
+                Order order = Orders.First(o => o.Id == clonedOrder.Id);
+                order.Items = clonedOrder.Items;
+                SelectedOrder = order;
+                CollectionViewSource.GetDefaultView(Orders).Refresh();
+            }
         }
 
         private bool SearchFilter(object obj)
@@ -119,11 +133,12 @@ namespace OnlineShop.Client.ViewModels
 
 
             Order order = orderService.Create(newOrder);
-            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEtitOrderWindow, newOrder);
+            order.User = User;
             User.Orders.Add(order);
             Orders.Add(order);
+            clonedOrder = ObjectCopier.Clone<Order>(order);
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
             NewOrderName = string.Empty;
-            CollectionViewSource.GetDefaultView(Orders).Refresh();
         }
 
         #endregion
@@ -253,8 +268,8 @@ namespace OnlineShop.Client.ViewModels
 
         private void EditOrderCommandExecute(object obj)
         {
-            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEtitOrderWindow, SelectedOrder);
-            CollectionViewSource.GetDefaultView(Orders).Refresh();
+            clonedOrder = ObjectCopier.Clone<Order>(SelectedOrder);
+            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
         }
 
         #endregion

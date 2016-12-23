@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnlineShop.Client.Common;
 
 namespace OnlineShop.Client.Views
 {
@@ -22,6 +23,18 @@ namespace OnlineShop.Client.Views
         public EditOrderWindow()
         {
             InitializeComponent();
+            Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.CloseEditOrderWindow, CloseEditOrderWindow);
+        }
+
+        private void CloseEditOrderWindow(bool? dialogResult)
+        {
+            Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseEditOrderWindow);
+            this.DialogResult = dialogResult;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.ClosingEditOrderWindow, this.DialogResult);
         }
     }
 }
