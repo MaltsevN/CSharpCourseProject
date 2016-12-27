@@ -79,6 +79,7 @@
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Validators\QuantityValidator.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\EditOrderWindowViewModel.cs" />
     <Compile Include="ViewModels\OrdersWindowViewModel.cs" />

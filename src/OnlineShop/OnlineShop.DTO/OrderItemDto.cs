@@ -21,5 +21,13 @@ namespace OnlineShop.DTO
 
         [DataMember]
         public int OrderId { get; set; }
+
+        public double TotalPrice
+        {
+            get
+            {
+                return Product.Price.Price * Quantity;
+            }
+        }
     }
 }
