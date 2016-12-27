@@ -7,19 +7,11 @@ using System.Threading.Tasks;
 
 namespace DomainModel
 {
-    [DataContract]
     public enum Status
     {
-        [EnumMember]
         NotDecorated,
-
-        [EnumMember]
         Cancelled,
-
-        [EnumMember]
         Confirmed,
-
-        [EnumMember]
         Processing
     }
 }

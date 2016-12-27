@@ -7,16 +7,10 @@ using System.Threading.Tasks;
 
 namespace DomainModel
 {
-    [DataContract]
     public enum Rank
     {
-        [EnumMember]
         Client,
-
-        [EnumMember]
         Admin,
-
-        [EnumMember]
         HeadAdmin
     }
 }
