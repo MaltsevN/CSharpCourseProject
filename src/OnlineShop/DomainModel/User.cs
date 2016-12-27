@@ -8,27 +8,20 @@ using System.Threading.Tasks;
 
 namespace DomainModel
 {
-    [DataContract]
     public class User
     {
-        [DataMember]
         public int Id { get; set; }
         
-        [DataMember]
         public string Name { get; set; }
         
-        [DataMember]
         [MaxLength(25)]
         public string Login { get; set; }
-
-        [DataMember]
+        
         public string Password { get; set; }
-
-        [DataMember]
+        
         public Rank Rank { get; set; }
-
-        [DataMember]
-        public List<Order> Orders { get; set; }
+        
+        public virtual List<Order> Orders { get; set; }
 
         public User()
         {

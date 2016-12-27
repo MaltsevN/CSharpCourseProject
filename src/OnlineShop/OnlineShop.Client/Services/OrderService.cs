@@ -3,37 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DomainModel;
-using Newtonsoft.Json;
 using System.Net.Http;
+using OnlineShop.DTO;
+using System.Web.Script.Serialization;
 
 namespace OnlineShop.Client.Services
 {
     class OrderService : IOrderService
     {
         private readonly HttpClient client;
+        private readonly JavaScriptSerializer serializer;
 
         public OrderService()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
             client = new HttpClient();
+            serializer = new JavaScriptSerializer();
         }
 
-        public Order Create(Order order)
+        public OrderDto Create(OrderDto order)
         {
-            string jsonRequest = JsonConvert.SerializeObject(order);
+            string jsonRequest = serializer.Serialize(order);
             string requestUri = Properties.Resources.UrlToServer + "Order/Create";
             var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
             if (responseMessage.IsSuccessStatusCode)
             {
                 string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<Order>(jsonResult);
-            }else
+                order = serializer.Deserialize<OrderDto>(jsonResult);
+            }
+            else
             {
                 order = null;
             }
@@ -43,7 +40,7 @@ namespace OnlineShop.Client.Services
 
         public void Delete(int id)
         {
-            string jsonRequest = JsonConvert.SerializeObject(id.ToString());
+            string jsonRequest = serializer.Serialize(id.ToString());
             string requestUri = Properties.Resources.UrlToServer + "Order/Delete";
             HttpRequestMessage request = new HttpRequestMessage
             {
@@ -54,19 +51,19 @@ namespace OnlineShop.Client.Services
             var responseMessage = client.SendAsync(request).Result;
         }
 
-        public Order GetOrder(int id)
+        public OrderDto GetOrder(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Order> GetOrders()
+        public IEnumerable<OrderDto> GetOrders()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Order order)
+        public void Update(OrderDto order)
         {
-            string jsonRequest = JsonConvert.SerializeObject(order);
+            string jsonRequest = serializer.Serialize(order);
             string requestUri = Properties.Resources.UrlToServer + "Order/Update";
             var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
         }

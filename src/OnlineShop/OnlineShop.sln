@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.ServiceContracts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.DAL.EntityFramework", "OnlineShop.DAL.EntityFramework\OnlineShop.DAL.EntityFramework.csproj", "{D9ABDF6F-C378-4BA4-999D-10237F841862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.DTO", "OnlineShop.DTO\OnlineShop.DTO.csproj", "{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{D9ABDF6F-C378-4BA4-999D-10237F841862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9ABDF6F-C378-4BA4-999D-10237F841862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9ABDF6F-C378-4BA4-999D-10237F841862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

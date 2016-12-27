@@ -5,13 +5,21 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel
+namespace OnlineShop.DTO
 {
-    public enum Status
+    [DataContract]
+    public enum StatusDto
     {
+        [EnumMember]
         NotDecorated,
+
+        [EnumMember]
         Cancelled,
+
+        [EnumMember]
         Confirmed,
+
+        [EnumMember]
         Processing
     }
 }

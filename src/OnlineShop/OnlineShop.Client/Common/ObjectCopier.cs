@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace OnlineShop.Client.Common
 {
@@ -19,14 +19,10 @@ namespace OnlineShop.Client.Common
                 return default(T);
             }
 
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
+            var serializer = new JavaScriptSerializer();
 
-            string json = JsonConvert.SerializeObject(source);
-            return JsonConvert.DeserializeObject<T>(json);
+            string json = serializer.Serialize(source);
+            return serializer.Deserialize<T>(json);
         }
     }
 }

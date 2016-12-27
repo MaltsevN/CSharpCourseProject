@@ -1,6 +1,6 @@
-﻿using DomainModel;
-using OnlineShop.Client.Common;
+﻿using OnlineShop.Client.Common;
 using OnlineShop.Client.Services;
+using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,12 +19,12 @@ namespace OnlineShop.Client.ViewModels
         private IMessegeManager messageService;
         private ICollectionView collectionView;
 
-        private Order clonedOrder;
+        private OrderDto clonedOrder;
 
 
-        public ObservableCollection<Order> Orders { get; private set; }
+        public ObservableCollection<OrderDto> Orders { get; private set; }
 
-        public User User { get; set; }
+        public UserDto User { get; set; }
 
         private string newOrderName = string.Empty;
         public string NewOrderName
@@ -40,8 +40,8 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private Order selectedOrder;
-        public Order SelectedOrder
+        private OrderDto selectedOrder;
+        public OrderDto SelectedOrder
         {
             get
             {
@@ -73,7 +73,7 @@ namespace OnlineShop.Client.ViewModels
         {
             this.orderService = orderService;
             this.messageService = messageService;
-            Orders = new ObservableCollection<Order>();
+            Orders = new ObservableCollection<OrderDto>();
             collectionView = CollectionViewSource.GetDefaultView(Orders);
             collectionView.Filter = SearchFilter;
             Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingEditOrderWindow, ClosingEditOrderWindow);
@@ -83,8 +83,8 @@ namespace OnlineShop.Client.ViewModels
         {
             if(dialogResult == true)
             {
-                Order order = Orders.First(o => o.Id == clonedOrder.Id);
-                order.Items = clonedOrder.Items;
+                OrderDto order = Orders.First(o => o.Id == clonedOrder.Id);
+                order.OrderItems = clonedOrder.OrderItems;
                 SelectedOrder = order;
                 CollectionViewSource.GetDefaultView(Orders).Refresh();
             }
@@ -92,7 +92,7 @@ namespace OnlineShop.Client.ViewModels
 
         private bool SearchFilter(object obj)
         {
-            Order order = obj as Order;
+            OrderDto order = obj as OrderDto;
             if (order == null)
                 return false;
 
@@ -123,21 +123,26 @@ namespace OnlineShop.Client.ViewModels
 
         private void AddNewOrderCommandExecute(object obj)
         {
-            Order newOrder = new Order()
+            OrderDto newOrder = new OrderDto()
             {
                 Name = NewOrderName,
-                Status = Status.NotDecorated,
-                UserId = User.Id,
+                Status = StatusDto.NotDecorated,
+                User = new UserChildDto()
+                {
+                    Id = User.Id,
+                    Login = User.Login,
+                    Name = User.Name,
+                    Rank = User.Rank
+                },
                 PlacingDate = DateTime.UtcNow
             };
 
 
-            Order order = orderService.Create(newOrder);
-            order.User = User;
+            OrderDto order = orderService.Create(newOrder);
             User.Orders.Add(order);
             Orders.Add(order);
-            clonedOrder = ObjectCopier.Clone<Order>(order);
-            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+            clonedOrder = ObjectCopier.Clone<OrderDto>(order);
+            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
             NewOrderName = string.Empty;
         }
 
@@ -191,7 +196,7 @@ namespace OnlineShop.Client.ViewModels
 
         private bool DeleteOrderCommandCanExecute(object obj)
         {
-            return SelectedOrder != null && SelectedOrder.Status == Status.NotDecorated;
+            return SelectedOrder != null && SelectedOrder.Status == StatusDto.NotDecorated;
         }
         #endregion
 
@@ -209,7 +214,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void ConfirmOrderCommandExecute(object obj)
         {
-            SelectedOrder.Status = Status.Processing;
+            SelectedOrder.Status = StatusDto.Processing;
             orderService.Update(SelectedOrder);
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
@@ -217,7 +222,7 @@ namespace OnlineShop.Client.ViewModels
 
         private bool ConfirmOrderCommandCanExecute(object obj)
         {
-            return SelectedOrder != null && SelectedOrder.Status == Status.NotDecorated;
+            return SelectedOrder != null && SelectedOrder.Status == StatusDto.NotDecorated;
         }
         #endregion
 
@@ -235,7 +240,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void CancelOrderCommandExecute(object obj)
         {
-            SelectedOrder.Status = Status.NotDecorated;
+            SelectedOrder.Status = StatusDto.NotDecorated;
             orderService.Update(SelectedOrder);
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
@@ -243,7 +248,7 @@ namespace OnlineShop.Client.ViewModels
 
         private bool CancelOrderCommandCanExecute(object obj)
         {
-            return SelectedOrder != null && SelectedOrder.Status == Status.Processing;
+            return SelectedOrder != null && SelectedOrder.Status == StatusDto.Processing;
         }
         #endregion
 
@@ -268,8 +273,8 @@ namespace OnlineShop.Client.ViewModels
 
         private void EditOrderCommandExecute(object obj)
         {
-            clonedOrder = ObjectCopier.Clone<Order>(SelectedOrder);
-            Messenger.Default.Send<WindowMessege, Order>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+            clonedOrder = ObjectCopier.Clone<OrderDto>(SelectedOrder);
+            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
         }
 
         #endregion

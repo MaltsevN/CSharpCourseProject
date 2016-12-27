@@ -5,14 +5,21 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel
+namespace OnlineShop.DTO
 {
-    public class Product
+    [DataContract]
+    public class UserChildDto
     {
+        [DataMember]
         public int Id { get; set; }
-        
+
+        [DataMember]
         public string Name { get; set; }
-        
-        public virtual ProductPrice Price { get; set; }
+
+        [DataMember]
+        public string Login { get; set; }
+
+        [DataMember]
+        public RankDto Rank { get; set; }
     }
 }

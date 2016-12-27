@@ -8,27 +8,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainModel
 {
-    [DataContract]
     public class OrderItem
     {
-        [DataMember]
         public int Id { get; set; }
-
-        [DataMember]
+        
         public int Quantity { get; set; }
-
-        [DataMember]
+        
         public int ProductId { get; set; }
-
-        [DataMember]
+        
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
-
-        [DataMember]
+        public virtual Product Product { get; set; }
+        
         public int OrderId { get; set; }
-
-        [DataMember]
+        
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

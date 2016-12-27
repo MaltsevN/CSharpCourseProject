@@ -5,14 +5,18 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel
+namespace OnlineShop.DTO
 {
-    public class ProductPrice
+    [DataContract]
+    public class ProductPriceDto
     {
+        [DataMember]
         public int Id { get; set; }
-        
+
+        [DataMember]
         public double Price { get; set; }
-        
+
+        [DataMember]
         public DateTime EffectiveDate { get; set; }
     }
 }

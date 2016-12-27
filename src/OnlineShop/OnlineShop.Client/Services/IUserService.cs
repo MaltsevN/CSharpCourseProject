@@ -1,4 +1,4 @@
-﻿using DomainModel;
+﻿using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ namespace OnlineShop.Client.Services
 {
     interface IUserService
     {
-        User Create(User user);
+        UserDto Create(UserDto user);
         void Delete(int id);
-        User GetUser(int id);
-        IEnumerable<User> GetUsers();
-        void Update(User user);
+        UserDto GetUser(int id);
+        IEnumerable<UserDto> GetUsers();
+        void Update(UserDto user);
     }
 }

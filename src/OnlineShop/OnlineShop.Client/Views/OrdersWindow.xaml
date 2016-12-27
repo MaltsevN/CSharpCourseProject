@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:OnlineShop.Client.Views"
         xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
-        xmlns:domainModel="clr-namespace:DomainModel;assembly=DomainModel"
+        xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
         Title="Orders" WindowStartupLocation="CenterScreen" FontSize="14">
     <Window.Resources>
@@ -63,16 +63,16 @@
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.NotDecorated}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.NotDecorated}">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Cancelled}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Cancelled}">
                                 <Setter Property="Visibility" Value="Collapsed"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Confirmed}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Confirmed}">
                                 <Setter Property="Visibility" Value="Collapsed"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Processing}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
                                 <Setter Property="Visibility" Value="Collapsed"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
@@ -83,16 +83,16 @@
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.NotDecorated}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.NotDecorated}">
                                 <Setter Property="Visibility" Value="Collapsed"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Cancelled}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Cancelled}">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Confirmed}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Confirmed}">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static domainModel:Status.Processing}">
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">

@@ -5,12 +5,18 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel
+namespace OnlineShop.DTO
 {
-    public enum Rank
+    [DataContract]
+    public enum RankDto
     {
+        [EnumMember]
         Client,
+
+        [EnumMember]
         Admin,
+
+        [EnumMember]
         HeadAdmin
     }
 }

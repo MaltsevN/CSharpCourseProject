@@ -28,12 +28,12 @@ namespace OnlineShop.Client.Views
 
         private void CloseEditOrderWindow(bool? dialogResult)
         {
-            Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseEditOrderWindow);
             this.DialogResult = dialogResult;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseEditOrderWindow);
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.ClosingEditOrderWindow, this.DialogResult);
         }
     }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{64A5130A-6B02-4B53-B4E9-C10A31E146E9}</ProjectGuid>
+    <ProjectGuid>{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OnlineShop.ServiceContracts</RootNamespace>
-    <AssemblyName>OnlineShop.ServiceContracts</AssemblyName>
+    <RootNamespace>OnlineShop.DTO</RootNamespace>
+    <AssemblyName>OnlineShop.DTO</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,14 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,33 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMapperConfigurator.cs" />
-    <Compile Include="IOrderItemContract.cs" />
-    <Compile Include="IProductContract.cs" />
-    <Compile Include="IUserContract.cs" />
-    <Compile Include="IOrderContract.cs" />
-    <Compile Include="OrderContract.cs" />
-    <Compile Include="OrderItemContract.cs" />
-    <Compile Include="ProductContract.cs" />
+    <Compile Include="OrderDto.cs" />
+    <Compile Include="OrderItemDto.cs" />
+    <Compile Include="ProductDto.cs" />
+    <Compile Include="ProductPriceDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserContract.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{886ef80a-8c2c-49ad-be0d-78ed198b5245}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
-      <Project>{bda236b8-5a90-40fa-be61-b6f4d88da58a}</Project>
-      <Name>DomainModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OnlineShop.DTO\OnlineShop.DTO.csproj">
-      <Project>{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}</Project>
-      <Name>OnlineShop.DTO</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="RankDto.cs" />
+    <Compile Include="StatusDto.cs" />
+    <Compile Include="UserChildDto.cs" />
+    <Compile Include="UserDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
