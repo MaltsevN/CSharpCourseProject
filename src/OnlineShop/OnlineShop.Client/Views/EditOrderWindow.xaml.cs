@@ -36,5 +36,10 @@ namespace OnlineShop.Client.Views
             Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseEditOrderWindow);
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.ClosingEditOrderWindow, this.DialogResult);
         }
+
+        private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CollectionViewSource.GetDefaultView(orderItemList.ItemsSource).Refresh();
+        }
     }
 }
