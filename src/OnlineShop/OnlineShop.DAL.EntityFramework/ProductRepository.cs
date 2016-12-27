@@ -36,12 +36,12 @@ namespace OnlineShop.DAL.EntityFramework
 
         public Product GetItem(int id)
         {
-            return appContext.Products.Include(p => p.Price).FirstOrDefault(p => p.Id == id);
+            return appContext.Products.Find(id);
         }
 
         public IEnumerable<Product> GetItemsList()
         {
-            return appContext.Products.Include(p => p.Price);
+            return appContext.Products;
         }
 
         public void Save()
