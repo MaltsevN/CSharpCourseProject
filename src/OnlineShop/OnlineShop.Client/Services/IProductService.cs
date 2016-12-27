@@ -1,18 +1,18 @@
-﻿using System;
+﻿using OnlineShop.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DomainModel;
 
 namespace OnlineShop.Client.Services
 {
     interface IProductService
     {
-        Product Create(Product product);
+        ProductDto Create(ProductDto product);
         void Delete(int id);
-        Product GetProduct(int id);
-        IEnumerable<Product> GetProducts();
-        void Update(Product product);
+        ProductDto GetProduct(int id);
+        IEnumerable<ProductDto> GetProducts();
+        void Update(ProductDto product);
     }
 }

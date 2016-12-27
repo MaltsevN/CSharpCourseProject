@@ -1,7 +1,7 @@
-﻿using DomainModel;
-using OnlineShop.Client.Common;
+﻿using OnlineShop.Client.Common;
 using OnlineShop.Client.Models;
 using OnlineShop.Client.Services;
+using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,14 +24,14 @@ namespace OnlineShop.Client.ViewModels
         {
             this.orderItemService = orderItemService;
             this.productService = productService;
-            OrderItems = new ObservableCollection<CheckableItem<OrderItem>>();
+            OrderItems = new ObservableCollection<CheckableItem<OrderItemDto>>();
             collectionView = CollectionViewSource.GetDefaultView(OrderItems);
             collectionView.Filter = SearchFilter;
         }
 
         private bool SearchFilter(object obj)
         {
-            CheckableItem<OrderItem> orderItem = obj as CheckableItem<OrderItem>;
+            CheckableItem<OrderItemDto> orderItem = obj as CheckableItem<OrderItemDto>;
             if (orderItem == null)
                 return false;
 
@@ -53,9 +53,9 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        public Order Order { get; set; }
+        public OrderDto Order { get; set; }
 
-        public ObservableCollection<CheckableItem<OrderItem>> OrderItems { get; set; }
+        public ObservableCollection<CheckableItem<OrderItemDto>> OrderItems { get; set; }
 
         #region WindowLoadedCommand
         private RelayCommand<object, object> windowLoadedCommand;
@@ -72,20 +72,20 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
-            foreach (Product product in productService.GetProducts())
+            foreach (ProductDto product in productService.GetProducts())
             {
-                OrderItem orderItem = Order.Items.Find(item => item.ProductId == product.Id);
+                OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
                 if (orderItem != null)
                 {
-                    OrderItems.Add(new CheckableItem<OrderItem>(orderItem)
+                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
                     {
                         IsChecked = true
                     });
                 }
                 else
                 {
-                    orderItem = new OrderItem() { ProductId = product.Id, Product = product, Quantity = 1 };
-                    OrderItems.Add(new CheckableItem<OrderItem>(orderItem)
+                    orderItem = new OrderItemDto() { Product = product, Quantity = 1 };
+                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
                     {
                         IsChecked = false
                     });
@@ -109,47 +109,37 @@ namespace OnlineShop.Client.ViewModels
 
         private bool SaveOrderCommandCanExecute(object obj)
         {
-            return Order != null && Order.Status == Status.NotDecorated;
+            return Order != null && Order.Status == StatusDto.NotDecorated;
         }
 
         private void SaveOrderCommandExecute(object obj)
         {
-            var existingOrderItems = Order.Items;
+            var existingOrderItems = Order.OrderItems;
             var newOrderItems = OrderItems.Where(checkableItem => checkableItem.IsChecked).Select(checkableItem => checkableItem.Item);
 
             var addedOrderItems = newOrderItems.Where(orderItem => !existingOrderItems.Any(existingOrderItem => existingOrderItem.Id == orderItem.Id)).ToList();
             var deletedOrderItems = existingOrderItems.Where(existingOrderItem => !newOrderItems.Any(orderItem => orderItem.Id == existingOrderItem.Id)).ToList();
             var updatedOrderItems = existingOrderItems.Where(existingOrderItem => !deletedOrderItems.Any(deletedOrderItem => deletedOrderItem.Id == existingOrderItem.Id)).ToList();
 
-            foreach (OrderItem orderItem in addedOrderItems)
+            foreach (OrderItemDto orderItem in addedOrderItems)
             {
-                Product prod = orderItem.Product;
-                orderItem.Product = null;
                 orderItem.OrderId = Order.Id;
                 var createdOrderItem = orderItemService.Create(orderItem);
-                createdOrderItem.Order = Order;
-                createdOrderItem.Product = prod;
-                Order.Items.Add(createdOrderItem);
-
+                Order.OrderItems.Add(createdOrderItem);
             }
 
-            foreach (OrderItem orderItem in deletedOrderItems)
+            foreach (OrderItemDto orderItem in deletedOrderItems)
             {
                 orderItemService.Delete(orderItem.Id);
-                Order.Items.Remove(orderItem);
+                Order.OrderItems.Remove(orderItem);
             }
 
-            foreach (OrderItem orderItem in updatedOrderItems)
+            foreach (OrderItemDto orderItem in updatedOrderItems)
             {
-                Product prod = orderItem.Product;
-                orderItem.Product = null;
-                orderItem.Order = null;
                 orderItemService.Update(orderItem);
-                var tempOrderItem = Order.Items.Find(o => o.Id == orderItem.Id);
-                Order.Items.Remove(tempOrderItem);
-                orderItem.Product = prod;
-                orderItem.Order = Order;
-                Order.Items.Add(orderItem);
+                var tempOrderItem = Order.OrderItems.Find(o => o.Id == orderItem.Id);
+                Order.OrderItems.Remove(tempOrderItem);
+                Order.OrderItems.Add(orderItem);
             }
 
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, true);

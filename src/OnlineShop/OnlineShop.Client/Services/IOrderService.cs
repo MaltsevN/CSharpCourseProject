@@ -1,4 +1,4 @@
-﻿using DomainModel;
+﻿using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ namespace OnlineShop.Client.Services
 {
     interface IOrderService
     {
-        Order Create(Order order);
+        OrderDto Create(OrderDto order);
         void Delete(int id);
-        Order GetOrder(int id);
-        IEnumerable<Order> GetOrders();
-        void Update(Order order);
+        OrderDto GetOrder(int id);
+        IEnumerable<OrderDto> GetOrders();
+        void Update(OrderDto order);
     }
 }

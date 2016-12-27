@@ -3,26 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DomainModel;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Web.Script.Serialization;
+using OnlineShop.DTO;
 
 namespace OnlineShop.Client.Services
 {
     class ProductService : IProductService
     {
         private readonly HttpClient client;
+        private readonly JavaScriptSerializer serializer;
 
         public ProductService()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            };
             client = new HttpClient();
+            serializer = new JavaScriptSerializer();
         }
 
-        public Product Create(Product product)
+        public ProductDto Create(ProductDto product)
         {
             throw new NotImplementedException();
         }
@@ -32,26 +30,26 @@ namespace OnlineShop.Client.Services
             throw new NotImplementedException();
         }
 
-        public Product GetProduct(int id)
+        public ProductDto GetProduct(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductDto> GetProducts()
         {
-            IEnumerable<Product> products = new Product[0];
+            IEnumerable<ProductDto> products = new ProductDto[0];
             string requestUri = Properties.Resources.UrlToServer + "Product/GetAllProducts";
             var responceMessage = client.GetAsync(requestUri).Result;
             if (responceMessage.IsSuccessStatusCode)
             {
                 string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
-                products = JsonConvert.DeserializeObject<IEnumerable<Product>>(jsonResult);
+                products = serializer.Deserialize<IEnumerable<ProductDto>>(jsonResult);
             }
 
             return products;
         }
 
-        public void Update(Product product)
+        public void Update(ProductDto product)
         {
             throw new NotImplementedException();
         }

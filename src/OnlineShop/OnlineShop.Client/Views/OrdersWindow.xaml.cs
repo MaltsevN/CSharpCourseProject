@@ -12,8 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using OnlineShop.Client.Common;
-using DomainModel;
 using OnlineShop.Client.ViewModels;
+using OnlineShop.DTO;
 
 namespace OnlineShop.Client.Views
 {
@@ -25,10 +25,10 @@ namespace OnlineShop.Client.Views
         public OrdersWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<WindowMessege, Order>(this, WindowMessege.OpenEditOrderWindow, OpenEtitOrderWindow);
+            Messenger.Default.Register<WindowMessege, OrderDto>(this, WindowMessege.OpenEditOrderWindow, OpenEtitOrderWindow);
         }
 
-        private void OpenEtitOrderWindow(Order order)
+        private void OpenEtitOrderWindow(OrderDto order)
         {
             EditOrderWindow window = new EditOrderWindow();
             var viewModel = (EditOrderWindowViewModel)window.DataContext;

@@ -3,26 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DomainModel;
-using Newtonsoft.Json;
 using System.Net.Http;
+using System.Web.Script.Serialization;
+using OnlineShop.DTO;
 
 namespace OnlineShop.Client.Services
 {
     class UserService : IUserService
     {
         private readonly HttpClient client;
+        private readonly JavaScriptSerializer serializer;
 
         public UserService()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            };
             client = new HttpClient();
+            serializer = new JavaScriptSerializer();
         }
 
-        public User Create(User user)
+        public UserDto Create(UserDto user)
         {
             throw new NotImplementedException();
         }
@@ -32,26 +30,25 @@ namespace OnlineShop.Client.Services
             throw new NotImplementedException();
         }
 
-        public User GetUser(int id)
+        public UserDto GetUser(int id)
         {
-            User user = null;
+            UserDto user = null;
             string requestUri = Properties.Resources.UrlToServer + "User/GetUser/" + id;
             var responceMessage = client.GetAsync(requestUri).Result;
             if (responceMessage.IsSuccessStatusCode)
             {
                 string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
-                user = JsonConvert.DeserializeObject<User>(jsonResult);
+                user = serializer.Deserialize<UserDto>(jsonResult);
             }
-
             return user;
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<UserDto> GetUsers()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(User user)
+        public void Update(UserDto user)
         {
             throw new NotImplementedException();
         }

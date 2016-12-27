@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using DomainModel;
 using OnlineShop.Client.Common;
 using OnlineShop.Client.Services;
+using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +36,7 @@ namespace OnlineShop.Client.ViewModels
             //Desing Data
 
             IUserService userService = new UserService();
-            User user = userService.GetUser(1);
+            UserDto user = userService.GetUser(1);
             builder.RegisterType<OrdersWindowViewModel>().WithProperty("User", user);
             //
 
