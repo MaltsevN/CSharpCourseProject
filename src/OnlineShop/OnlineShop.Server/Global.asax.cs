@@ -20,6 +20,8 @@ namespace OnlineShop.Server
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            AutoMapperConfigurator.Configure();
+
             var builder = new ContainerBuilder();
             builder.RegisterType<OrderContract>();
             builder.RegisterType<ProductContract>();
