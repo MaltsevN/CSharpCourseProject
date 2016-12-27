@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -42,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperConfigurator.cs" />
     <Compile Include="IOrderItemContract.cs" />
     <Compile Include="IProductContract.cs" />
     <Compile Include="IUserContract.cs" />
@@ -61,6 +66,13 @@
       <Project>{bda236b8-5a90-40fa-be61-b6f4d88da58a}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OnlineShop.DTO\OnlineShop.DTO.csproj">
+      <Project>{79CB1BDA-2A96-4AF5-A5DA-8A111BDDAD94}</Project>
+      <Name>OnlineShop.DTO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

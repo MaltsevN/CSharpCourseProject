@@ -7,6 +7,8 @@ using DAL;
 using DomainModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
+using OnlineShop.DTO;
+using AutoMapper;
 
 namespace OnlineShop.ServiceContracts
 {
@@ -20,11 +22,13 @@ namespace OnlineShop.ServiceContracts
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public User Create(User item)
+        public UserDto Create(UserDto item)
         {
-            User user = userRepository.Create(item);
+            User convertedUser = Mapper.Map<UserDto, User>(item);
+            User user = userRepository.Create(convertedUser);
             userRepository.Save();
-            return user;
+            UserDto dto = Mapper.Map<User, UserDto>(user);
+            return dto;
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -35,22 +39,28 @@ namespace OnlineShop.ServiceContracts
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetUser/{id}")]
-        public User GetItem(string id)
+        public UserDto GetItem(string id)
         {
-            return userRepository.GetItem(Convert.ToInt32(id));
+            User user = userRepository.GetItem(Convert.ToInt32(id));
+            UserDto dto = Mapper.Map<User, UserDto>(user);
+            return dto;
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllUsers")]
-        public IEnumerable<User> GetItemsList()
+        public IEnumerable<UserDto> GetItemsList()
         {
-            return userRepository.GetItemsList();
+            var items = userRepository.GetItemsList();
+            IEnumerable<UserDto> dtos = Mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(items);
+            return dtos;
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public void Update(User item)
+        public void Update(UserDto item)
         {
-            userRepository.Update(item);
+            User convertedUser = Mapper.Map<UserDto, User>(item);
+            userRepository.Update(convertedUser);
             userRepository.Save();
         }
     }
 }
+

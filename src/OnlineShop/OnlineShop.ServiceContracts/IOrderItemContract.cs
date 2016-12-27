@@ -7,6 +7,7 @@ using System.ServiceModel.Web;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OnlineShop.DTO;
 
 namespace OnlineShop.ServiceContracts
 {
@@ -15,7 +16,7 @@ namespace OnlineShop.ServiceContracts
     {
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        OrderItem Create(OrderItem item);
+        OrderItemDto Create(OrderItemDto item);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -23,14 +24,14 @@ namespace OnlineShop.ServiceContracts
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetOrderItem/{id}")]
-        OrderItem GetItem(string id);
+        OrderItemDto GetItem(string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllOrderItems")]
-        IEnumerable<OrderItem> GetItemsList();
+        IEnumerable<OrderItemDto> GetItemsList();
 
         [OperationContract]
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        void Update(OrderItem item);
+        void Update(OrderItemDto item);
     }
 }

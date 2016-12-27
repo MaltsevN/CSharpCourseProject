@@ -7,24 +7,31 @@ using DAL;
 using DomainModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
+using OnlineShop.DTO;
+using AutoMapper;
 
 namespace OnlineShop.ServiceContracts
 {
     public class OrderContract: IOrderContract
     {
         IRepository<Order> orderRepository;
+        IRepository<User> userRepository;
 
         public OrderContract(IUnitOfWork unitOfWork)
         {
             this.orderRepository = unitOfWork.OrderRepository;
+            this.userRepository = unitOfWork.UserRepository;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public Order Create(Order item)
+        public OrderDto Create(OrderDto item)
         {
-            Order order = orderRepository.Create(item);
+            Order convertedOrder = Mapper.Map<OrderDto, Order>(item);
+            convertedOrder.User = userRepository.GetItem(convertedOrder.UserId);
+            Order order = orderRepository.Create(convertedOrder);
             orderRepository.Save();
-            return order;
+            OrderDto dto = Mapper.Map<Order, OrderDto>(order);
+            return dto;
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -35,21 +42,28 @@ namespace OnlineShop.ServiceContracts
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetOrder/{id}")]
-        public Order GetItem(string id)
+        public OrderDto GetItem(string id)
         {
-            return orderRepository.GetItem(Convert.ToInt32(id));
+            var order = orderRepository.GetItem(Convert.ToInt32(id));
+            OrderDto dto = Mapper.Map<Order, OrderDto>(order);
+            order = Mapper.Map<OrderDto, Order>(dto);
+            return dto;
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllOrders")]
-        public IEnumerable<Order> GetItemsList()
+        public IEnumerable<OrderDto> GetItemsList()
         {
-            return orderRepository.GetItemsList();
+            var items = orderRepository.GetItemsList();
+            IEnumerable<OrderDto> dtos = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderDto>>(items);
+            return dtos;
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        public void Update(Order item)
+        public void Update(OrderDto item)
         {
-            orderRepository.Update(item);
+            Order convertedOrder = Mapper.Map<OrderDto, Order>(item);
+            convertedOrder.User = userRepository.GetItem(item.User.Id);
+            orderRepository.Update(convertedOrder);
             orderRepository.Save();
         }
     }
