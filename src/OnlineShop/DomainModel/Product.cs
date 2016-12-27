@@ -17,6 +17,6 @@ namespace DomainModel
         public string Name { get; set; }
 
         [DataMember]
-        public ProductPrice Price { get; set; }
+        public virtual ProductPrice Price { get; set; }
     }
 }

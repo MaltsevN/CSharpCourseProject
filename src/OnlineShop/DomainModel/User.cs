@@ -28,7 +28,7 @@ namespace DomainModel
         public Rank Rank { get; set; }
 
         [DataMember]
-        public List<Order> Orders { get; set; }
+        public virtual List<Order> Orders { get; set; }
 
         public User()
         {

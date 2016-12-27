@@ -22,13 +22,13 @@ namespace DomainModel
 
         [DataMember]
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
         [DataMember]
         public int OrderId { get; set; }
 
         [DataMember]
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

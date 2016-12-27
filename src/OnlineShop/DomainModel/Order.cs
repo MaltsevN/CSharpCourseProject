@@ -24,14 +24,14 @@ namespace DomainModel
         public Status Status { get; set; }
 
         [DataMember]
-        public List<OrderItem> Items { get; set; }
+        public virtual List<OrderItem> Items { get; set; }
 
         [DataMember]
         public int UserId { get; set; }
 
         [DataMember]
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public Order()
         {
