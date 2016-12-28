@@ -10,6 +10,10 @@ namespace OnlineShop.Client.Common
     {
         OpenEditOrderWindow,
         CloseEditOrderWindow,
-        ClosingEditOrderWindow
+        ClosingEditOrderWindow,
+        
+        CloseAuthenticationWindow,
+
+        OpenOrdersWindow
     }
 }

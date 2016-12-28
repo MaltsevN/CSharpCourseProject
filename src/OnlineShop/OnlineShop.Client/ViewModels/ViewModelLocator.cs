@@ -27,21 +27,16 @@ namespace OnlineShop.Client.ViewModels
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<ProductService>().As<IProductService>();
             builder.RegisterType<OrderItemService>().As<IOrderItemService>();
+            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().SingleInstance();
+            builder.RegisterType<UserService>().As<IUserService>();
 
             builder.RegisterType<MessegeManager>().As<IMessegeManager>();
 
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
             builder.RegisterType<EditOrderWindowViewModel>().AsSelf();
-
-            //Desing Data
-
-            IUserService userService = new UserService();
-            UserDto user = userService.GetUser(1);
-            builder.RegisterType<OrdersWindowViewModel>().WithProperty("User", user);
-            //
+            builder.RegisterType<AuthenticationWindowViewModel>().AsSelf();
 
             container = builder.Build();
-
         }
 
         protected static bool IsInDesignMode
@@ -65,6 +60,14 @@ namespace OnlineShop.Client.ViewModels
             get
             {
                 return container.Resolve<EditOrderWindowViewModel>();
+            }
+        }
+
+        public AuthenticationWindowViewModel AuthenticationWindowViewModel
+        {
+            get
+            {
+                return container.Resolve<AuthenticationWindowViewModel>();
             }
         }
     }
