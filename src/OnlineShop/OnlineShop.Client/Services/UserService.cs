@@ -22,12 +22,33 @@ namespace OnlineShop.Client.Services
 
         public UserDto Create(UserDto user)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(user);
+            string requestUri = Properties.Resources.UrlToServer + "User/Create";
+            var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
+                user = serializer.Deserialize<UserDto>(jsonResult);
+            }
+            else
+            {
+                user = null;
+            }
+
+            return user;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(id.ToString());
+            string requestUri = Properties.Resources.UrlToServer + "User/Delete";
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json"),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(requestUri)
+            };
+            var responseMessage = client.SendAsync(request).Result;
         }
 
         public UserDto GetUser(int id)
@@ -45,12 +66,23 @@ namespace OnlineShop.Client.Services
 
         public IEnumerable<UserDto> GetUsers()
         {
-            throw new NotImplementedException();
+            IEnumerable<UserDto> users = new UserDto[0];
+            string requestUri = Properties.Resources.UrlToServer + "User/GetAllUsers";
+            var responceMessage = client.GetAsync(requestUri).Result;
+            if (responceMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                users = serializer.Deserialize<IEnumerable<UserDto>>(jsonResult);
+            }
+
+            return users;
         }
 
         public void Update(UserDto user)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(user);
+            string requestUri = Properties.Resources.UrlToServer + "User/Update";
+            var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
         }
     }
 }

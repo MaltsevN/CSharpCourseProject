@@ -54,12 +54,29 @@ namespace OnlineShop.Client.Services
 
         public OrderItemDto GetOrderItem(int id)
         {
-            throw new NotImplementedException();
+            OrderItemDto orderItem = null;
+            string requestUri = Properties.Resources.UrlToServer + "OrderItem/GetOrderItem/" + id;
+            var responceMessage = client.GetAsync(requestUri).Result;
+            if (responceMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                orderItem = serializer.Deserialize<OrderItemDto>(jsonResult);
+            }
+            return orderItem;
         }
 
         public IEnumerable<OrderItemDto> GetOrderItems()
         {
-            throw new NotImplementedException();
+            IEnumerable<OrderItemDto> orderItems = new OrderItemDto[0];
+            string requestUri = Properties.Resources.UrlToServer + "OrderItem/GetAllOrderItems";
+            var responceMessage = client.GetAsync(requestUri).Result;
+            if (responceMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                orderItems = serializer.Deserialize<IEnumerable<OrderItemDto>>(jsonResult);
+            }
+
+            return orderItems;
         }
 
         public void Update(OrderItemDto orderItem)
