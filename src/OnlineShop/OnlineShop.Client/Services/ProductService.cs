@@ -22,17 +22,46 @@ namespace OnlineShop.Client.Services
 
         public ProductDto Create(ProductDto product)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(product);
+            string requestUri = Properties.Resources.UrlToServer + "Product/Create";
+            var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
+                product = serializer.Deserialize<ProductDto>(jsonResult);
+            }
+            else
+            {
+                product = null;
+            }
+
+            return product;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(id.ToString());
+            string requestUri = Properties.Resources.UrlToServer + "Product/Delete";
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json"),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(requestUri)
+            };
+            var responseMessage = client.SendAsync(request).Result;
         }
 
         public ProductDto GetProduct(int id)
         {
-            throw new NotImplementedException();
+            ProductDto product = null;
+            string requestUri = Properties.Resources.UrlToServer + "Product/GetProduct/" + id;
+            var responceMessage = client.GetAsync(requestUri).Result;
+            if (responceMessage.IsSuccessStatusCode)
+            {
+                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                product = serializer.Deserialize<ProductDto>(jsonResult);
+            }
+            return product;
         }
 
         public IEnumerable<ProductDto> GetProducts()
@@ -51,7 +80,9 @@ namespace OnlineShop.Client.Services
 
         public void Update(ProductDto product)
         {
-            throw new NotImplementedException();
+            string jsonRequest = serializer.Serialize(product);
+            string requestUri = Properties.Resources.UrlToServer + "Product/Update";
+            var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
         }
     }
 }
