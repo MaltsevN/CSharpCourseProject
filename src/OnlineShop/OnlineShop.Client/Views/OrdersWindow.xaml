@@ -6,11 +6,13 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:OnlineShop.Client.Views"
         xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
+        xmlns:converters="clr-namespace:OnlineShop.Client.Converters"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
         Title="Online shop - Orders" WindowStartupLocation="CenterScreen" FontSize="14" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
+        <converters:UtcToLocalDateConverter x:Key="utcToLocalDateConverter"></converters:UtcToLocalDateConverter>
     </Window.Resources>
     <Window.DataContext>
         <Binding Mode="OneWay" Path="OrdersWindowViewModel" Source="{StaticResource locator}"/>
@@ -51,7 +53,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate}" />
+                    <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate, Converter={StaticResource utcToLocalDateConverter}}" />
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
                     <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
                 </GridView>

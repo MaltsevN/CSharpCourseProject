@@ -222,7 +222,7 @@ namespace OnlineShop.Client.ViewModels
 
         private bool ConfirmOrderCommandCanExecute(object obj)
         {
-            return SelectedOrder != null && SelectedOrder.Status == StatusDto.NotDecorated;
+            return SelectedOrder != null && SelectedOrder.Status == StatusDto.NotDecorated && SelectedOrder.OrderItems.Count > 0;
         }
         #endregion
 
