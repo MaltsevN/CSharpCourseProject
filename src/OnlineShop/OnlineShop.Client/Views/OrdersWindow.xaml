@@ -19,13 +19,18 @@
         <Binding Mode="OneWay" Path="OrdersWindowViewModel" Source="{StaticResource locator}"/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding EditOrderCommand, Mode=OneWay}" />
+        <KeyBinding Key="Delete" Command="{Binding DeleteOrderCommand, Mode=OneWay}" />
+    </Window.InputBindings>
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding WindowLoadedCommand, Mode=OneWay}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=newOrderNameTextBox}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -39,8 +44,8 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" VerticalAlignment="Center" Text="{Binding NewOrderName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Grid.Column="1" Padding="16, 0" Margin="5" Command="{Binding AddNewOrderCommand, Mode=OneWay}">Add new order</Button>
+            <TextBox Name="newOrderNameTextBox" Grid.Column="0" VerticalAlignment="Center" Text="{Binding NewOrderName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Button Grid.Column="1" Padding="16, 0" Margin="5" Command="{Binding AddNewOrderCommand, Mode=OneWay}" IsDefault="True">Add new order</Button>
         </Grid>
         <Grid Grid.Row="1" Margin="10,0">
             <Grid.ColumnDefinitions>
@@ -67,7 +72,7 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="16, 0" Margin="5" Command="{Binding EditOrderCommand, Mode=OneWay}" IsDefault="True">Edit</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding EditOrderCommand, Mode=OneWay}">Edit</Button>
             <Button Padding="16, 0" Margin="5" Command="{Binding DeleteOrderCommand, Mode=OneWay}">Delete</Button>
             <Button Padding="16, 0" Margin="5" Content="Submit order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
                 <Button.Style>
