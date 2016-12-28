@@ -21,7 +21,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Margin="10,25" FontSize="24">Sign in</TextBlock>
-        <Grid Grid.Row="1" Margin="10">
+        <Grid Grid.Row="1" Margin="10" FocusManager.FocusedElement="{Binding ElementName=loginTextBox}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -31,14 +31,14 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Top">Login:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Top" Text="{Binding Login}"></TextBox>
+            <TextBox Name="loginTextBox" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Top" Text="{Binding Login}" TabIndex="0"></TextBox>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Top">Password:</TextBlock>
-            <PasswordBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Top" controls:PasswordBoxAssistant.BindPassword="true" controls:PasswordBoxAssistant.BoundPassword="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></PasswordBox>
+            <PasswordBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Top" controls:PasswordBoxAssistant.BindPassword="true" controls:PasswordBoxAssistant.BoundPassword="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TabIndex="1"></PasswordBox>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="16, 0" Margin="5" Command="{Binding SignInCommand, Mode=OneWay}">Sign in</Button>
-            <Button Padding="16, 0" Margin="5" Command="{Binding CloseCommand, Mode=OneWay}">Close</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding SignInCommand, Mode=OneWay}" IsDefault="True" TabIndex="2">Sign in</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding CloseCommand, Mode=OneWay}" TabIndex="3">Close</Button>
         </StackPanel>
     </Grid>
 </Window>
