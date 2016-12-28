@@ -8,7 +8,7 @@
         xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
-        Title="Orders" WindowStartupLocation="CenterScreen" FontSize="14">
+        Title="Online shop - Orders" WindowStartupLocation="CenterScreen" FontSize="14" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
     </Window.Resources>
