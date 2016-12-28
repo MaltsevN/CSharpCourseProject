@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
-        Title="Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
+        Title="Online shop - Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
     </Window.Resources>
@@ -23,7 +23,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid x:Name="grid">
+    <Grid x:Name="grid" FocusManager.FocusedElement="{Binding ElementName=searchTextBox}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -35,7 +35,7 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Margin="0,0,10,0">Search:</TextBlock>
-            <TextBox Grid.Column="1" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Name="searchTextBox" Grid.Column="1" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
         <DataGrid Name="orderItemList" Grid.Row="1" Margin="10" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding OrderItems}" AutoGenerateColumns="False" SelectionMode="Single">
             <DataGrid.Resources>
@@ -88,8 +88,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="16, 0" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}">Save</Button>
-            <Button Padding="16, 0" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}">Cancel</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}" IsDefault="True">Save</Button>
+            <Button Padding="16, 0" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>
