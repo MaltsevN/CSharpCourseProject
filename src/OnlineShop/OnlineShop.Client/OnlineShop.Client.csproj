@@ -74,6 +74,7 @@
     <Compile Include="Common\ObjectCopier.cs" />
     <Compile Include="Common\WindowMessege.cs" />
     <Compile Include="Controls\PasswordBoxAssistant.cs" />
+    <Compile Include="Converters\UtcToLocalDateConverter.cs" />
     <Compile Include="Models\CheckableItem.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
