@@ -50,9 +50,10 @@
         <ListView Grid.Row="2" Margin="10,5" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Placing date" Width="150" DisplayMemberBinding="{Binding PlacingDate}" />
-                    <GridViewColumn Header="Status" Width="150" DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate}" />
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
                 </GridView>
             </ListView.View>
         </ListView>
