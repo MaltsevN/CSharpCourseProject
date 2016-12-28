@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
-        Title="Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing">
+        Title="Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
     </Window.Resources>
