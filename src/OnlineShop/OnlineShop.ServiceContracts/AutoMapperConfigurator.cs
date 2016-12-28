@@ -25,6 +25,13 @@ namespace OnlineShop.ServiceContracts
             UserConfigurator(config);
             RankConfigurator(config);
             StatusConfigurator(config);
+            AuthenticationTokenConfigurator(config);
+        }
+
+        private static void AuthenticationTokenConfigurator(IMapperConfigurationExpression config)
+        {
+            config.CreateMap<AuthenticationToken, AuthenticationTokenDto>();
+            config.CreateMap<AuthenticationTokenDto, AuthenticationToken>();
         }
 
         private static void StatusConfigurator(IMapperConfigurationExpression config)

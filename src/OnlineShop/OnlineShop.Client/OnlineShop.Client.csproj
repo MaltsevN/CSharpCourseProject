@@ -74,6 +74,8 @@
     <Compile Include="Common\ObjectCopier.cs" />
     <Compile Include="Common\WindowMessege.cs" />
     <Compile Include="Models\CheckableItem.cs" />
+    <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IOrderItemService.cs" />
     <Compile Include="Services\IOrderService.cs" />
     <Compile Include="Services\IProductService.cs" />

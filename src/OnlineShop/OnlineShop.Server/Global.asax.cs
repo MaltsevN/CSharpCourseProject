@@ -27,7 +27,8 @@ namespace OnlineShop.Server
             builder.RegisterType<ProductContract>();
             builder.RegisterType<OrderItemContract>();
             builder.RegisterType<UserContract>();
-            
+            builder.RegisterType<AccountContract>();
+
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
             AutofacHostFactory.Container = builder.Build();
@@ -36,7 +37,8 @@ namespace OnlineShop.Server
             RouteTable.Routes.Add(new ServiceRoute("OrderItem", new AutofacServiceHostFactory(), typeof(OrderItemContract)));
             RouteTable.Routes.Add(new ServiceRoute("Product", new AutofacServiceHostFactory(), typeof(ProductContract)));
             RouteTable.Routes.Add(new ServiceRoute("User", new AutofacServiceHostFactory(), typeof(UserContract)));
-            
+            RouteTable.Routes.Add(new ServiceRoute("Account", new AutofacServiceHostFactory(), typeof(AccountContract)));
+
         }
 
         protected void Session_Start(object sender, EventArgs e)
