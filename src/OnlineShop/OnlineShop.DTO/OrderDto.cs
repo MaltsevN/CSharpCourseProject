@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace OnlineShop.DTO
@@ -21,9 +22,18 @@ namespace OnlineShop.DTO
 
         [DataMember]
         public List<OrderItemDto> OrderItems { get; set; }
-        
+
         [DataMember]
         public UserChildDto User { get; set; }
+
+        [DataMember]
+        public double TotalPrice
+        {
+            get
+            {
+                return OrderItems.Sum(orderItem => orderItem.TotalPrice);
+            }
+        }
 
         public OrderDto()
         {

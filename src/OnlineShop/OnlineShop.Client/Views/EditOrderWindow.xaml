@@ -48,31 +48,31 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-                <Style x:Key="readOnlyTextBox" TargetType="{x:Type TextBox}">
+                <Style x:Key="readOnlyControl" TargetType="{x:Type Control}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.NotDecorated}">
-                            <Setter Property="IsReadOnly" Value="False"></Setter>
+                            <Setter Property="IsEnabled" Value="True"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Cancelled}">
-                            <Setter Property="IsReadOnly" Value="True"></Setter>
+                            <Setter Property="IsEnabled" Value="False"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Confirmed}">
-                            <Setter Property="IsReadOnly" Value="True"></Setter>
+                            <Setter Property="IsEnabled" Value="False"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Processing}">
-                            <Setter Property="IsReadOnly" Value="True"></Setter>
+                            <Setter Property="IsEnabled" Value="False"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding IsChecked}"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}"></DataGridCheckBoxColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Item.Product.Name}" IsReadOnly="True"></DataGridTextColumn>
                 <DataGridTextColumn Header="Price" Binding="{Binding Item.Product.Price.Price, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
                 <DataGridTemplateColumn Header="Quantity">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox LostFocus="QuantityTextBox_LostFocus" Style="{Binding Mode=OneWay, Source={StaticResource readOnlyTextBox}}">
+                            <TextBox LostFocus="QuantityTextBox_LostFocus" Style="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}">
                                 <TextBox.Text>
                                     <Binding Path="Item.Quantity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                                         <Binding.ValidationRules>
