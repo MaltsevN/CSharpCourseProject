@@ -75,8 +75,9 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
 
             if (context.Users.FirstOrDefault(u => u.Login == "TestUser") == null)
             {
-                context.Users.AddOrUpdate(u => u.Id,
-                    new User() { Id = 1, Login = "TestUser", Name = "User", Password = "testpassword", Rank = Rank.Client, Orders = new List<Order>() { order1, order2, order3, order4 } });
+                //User password = 12345
+                context.Users.AddOrUpdate(u => u.Id,                                    
+                    new User() { Id = 1, Login = "TestUser", Name = "User", Password = "827ccb0eea8a706c4c34a16891f84e7b", Rank = Rank.Client, Orders = new List<Order>() { order1, order2, order3, order4 } });
             }
             context.SaveChanges();
         }

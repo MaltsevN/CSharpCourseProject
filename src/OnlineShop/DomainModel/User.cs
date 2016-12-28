@@ -23,6 +23,8 @@ namespace DomainModel
         
         public virtual List<Order> Orders { get; set; }
 
+        public AuthenticationToken AuthenticationToken { get; set; }
+
         public User()
         {
             Orders = new List<Order>();

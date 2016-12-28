@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationTokenDto.cs" />
     <Compile Include="OrderDto.cs" />
     <Compile Include="OrderItemDto.cs" />
     <Compile Include="ProductDto.cs" />
