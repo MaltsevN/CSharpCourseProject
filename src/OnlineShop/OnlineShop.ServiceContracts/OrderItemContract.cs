@@ -58,7 +58,7 @@ namespace OnlineShop.ServiceContracts
         {
             var items = orderItemRepository.GetItemsList();
             IEnumerable<OrderItemDto> dtos = Mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemDto>>(items);
-            return null;
+            return dtos;
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
