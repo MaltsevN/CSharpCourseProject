@@ -25,8 +25,7 @@ namespace OnlineShop.DTO
 
         [DataMember]
         public UserChildDto User { get; set; }
-
-        [DataMember]
+        
         public double TotalPrice
         {
             get
