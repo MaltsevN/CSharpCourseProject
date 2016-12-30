@@ -25,6 +25,7 @@ namespace OnlineShop.DAL.EntityFramework
 
         public Order Create(Order item)
         {
+            item.User = appContext.Users.Find(item.UserId);
             return appContext.Orders.Add(item);
         }
 
@@ -52,6 +53,7 @@ namespace OnlineShop.DAL.EntityFramework
 
         public void Update(Order item)
         {
+            item.User = appContext.Users.Find(item.UserId);
             appContext.Entry<Order>(item).State = EntityState.Modified;
         }
     }
