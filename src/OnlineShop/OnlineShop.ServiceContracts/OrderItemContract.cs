@@ -29,8 +29,6 @@ namespace OnlineShop.ServiceContracts
         public OrderItemDto Create(OrderItemDto item)
         {
             OrderItem convertedOrder = Mapper.Map<OrderItemDto, OrderItem>(item);
-            convertedOrder.Order = orderRepository.GetItem(convertedOrder.OrderId);
-            convertedOrder.Product = productRepository.GetItem(convertedOrder.ProductId);
             OrderItem orderItem = orderItemRepository.Create(convertedOrder);
             orderItemRepository.Save();
             OrderItemDto dto = Mapper.Map<OrderItem, OrderItemDto>(orderItem);
@@ -65,8 +63,6 @@ namespace OnlineShop.ServiceContracts
         public void Update(OrderItemDto item)
         {
             OrderItem convertedOrder = Mapper.Map<OrderItemDto, OrderItem>(item);
-            convertedOrder.Order = orderRepository.GetItem(convertedOrder.OrderId);
-            convertedOrder.Product = productRepository.GetItem(convertedOrder.ProductId);
             orderItemRepository.Update(convertedOrder);
             orderItemRepository.Save();
         }
