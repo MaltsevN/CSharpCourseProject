@@ -10,7 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
-        Title="Online shop - Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
+        Title="Online shop - Edit order" WindowStartupLocation="CenterScreen"  FontSize="14" Closing="Window_Closing" Icon="/OnlineShop.Client;component/Images/AppIcon.ico" Background="WhiteSmoke">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
     </Window.Resources>
@@ -90,8 +90,8 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Padding="16, 0" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}" IsDefault="True">Save</Button>
-                <Button Padding="16, 0" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}" IsCancel="True">Cancel</Button>
+                <Button Padding="24, 5" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}" IsDefault="True">Save</Button>
+                <Button Padding="24, 5" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}" IsCancel="True">Cancel</Button>
             </StackPanel>
         </Grid>
         <controls:BusyLoader IsLoading="{Binding IsBusy}"/>
