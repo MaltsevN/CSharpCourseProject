@@ -9,10 +9,10 @@ namespace OnlineShop.Client.Services
 {
     interface IOrderItemService
     {
-        OrderItemDto Create(OrderItemDto order);
-        void Delete(int id);
-        OrderItemDto GetOrderItem(int id);
-        IEnumerable<OrderItemDto> GetOrderItems();
-        void Update(OrderItemDto orderItem);
+        Task<OrderItemDto> CreateAsync(OrderItemDto order);
+        Task DeleteAsync(int id);
+        Task<OrderItemDto> GetOrderItemAsync(int id);
+        Task<IEnumerable<OrderItemDto>> GetOrderItemsAsync();
+        Task UpdateAsync(OrderItemDto orderItem);
     }
 }

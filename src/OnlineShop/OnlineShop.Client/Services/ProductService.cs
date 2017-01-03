@@ -20,14 +20,14 @@ namespace OnlineShop.Client.Services
             serializer = new JavaScriptSerializer();
         }
 
-        public ProductDto Create(ProductDto product)
+        public async Task<ProductDto> CreateAsync(ProductDto product)
         {
             string jsonRequest = serializer.Serialize(product);
             string requestUri = Properties.Resources.UrlToServer + "Product/Create";
-            var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
             if (responseMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
                 product = serializer.Deserialize<ProductDto>(jsonResult);
             }
             else
@@ -38,7 +38,7 @@ namespace OnlineShop.Client.Services
             return product;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             string jsonRequest = serializer.Serialize(id.ToString());
             string requestUri = Properties.Resources.UrlToServer + "Product/Delete";
@@ -48,41 +48,41 @@ namespace OnlineShop.Client.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(requestUri)
             };
-            var responseMessage = client.SendAsync(request).Result;
+            var responseMessage = await client.SendAsync(request);
         }
 
-        public ProductDto GetProduct(int id)
+        public async Task<ProductDto> GetProductAsync(int id)
         {
             ProductDto product = null;
             string requestUri = Properties.Resources.UrlToServer + "Product/GetProduct/" + id;
-            var responceMessage = client.GetAsync(requestUri).Result;
+            var responceMessage = await client.GetAsync(requestUri);
             if (responceMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
                 product = serializer.Deserialize<ProductDto>(jsonResult);
             }
             return product;
         }
 
-        public IEnumerable<ProductDto> GetProducts()
+        public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         {
             IEnumerable<ProductDto> products = new ProductDto[0];
             string requestUri = Properties.Resources.UrlToServer + "Product/GetAllProducts";
-            var responceMessage = client.GetAsync(requestUri).Result;
+            var responceMessage = await client.GetAsync(requestUri);
             if (responceMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
                 products = serializer.Deserialize<IEnumerable<ProductDto>>(jsonResult);
             }
 
             return products;
         }
 
-        public void Update(ProductDto product)
+        public async Task UpdateAsync(ProductDto product)
         {
             string jsonRequest = serializer.Serialize(product);
             string requestUri = Properties.Resources.UrlToServer + "Product/Update";
-            var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
         }
     }
 }

@@ -22,14 +22,14 @@ namespace OnlineShop.Client.Services
             serializer = new JavaScriptSerializer();
         }
 
-        public void SignIn(string login, string password)
+        public async Task SignIn(string login, string password)
         {
             string jsonRequest = serializer.Serialize(new { login = login, password = password });
             string requestUri = Properties.Resources.UrlToServer + "Account/SignIn";
-            var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
             if (responseMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
                 AuthenticationToken = serializer.Deserialize<AuthenticationTokenDto>(jsonResult);
             }
         }

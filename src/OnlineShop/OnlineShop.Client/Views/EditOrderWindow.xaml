@@ -6,6 +6,7 @@
         xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
         xmlns:local="clr-namespace:OnlineShop.Client.Views"
         xmlns:validators="clr-namespace:OnlineShop.Client.Validators"
+        xmlns:controls="clr-namespace:OnlineShop.Client.Controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
@@ -23,73 +24,76 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid x:Name="grid" FocusManager.FocusedElement="{Binding ElementName=searchTextBox}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0"  Margin="10,10,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Margin="0,0,10,0">Search:</TextBlock>
-            <TextBox Name="searchTextBox" Grid.Column="1" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+    <Grid>
+        <Grid x:Name="grid" FocusManager.FocusedElement="{Binding ElementName=searchTextBox}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"  Margin="10,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="0,0,10,0">Search:</TextBlock>
+                <TextBox Name="searchTextBox" Grid.Column="1" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </Grid>
+            <DataGrid Name="orderItemList" Grid.Row="1" Margin="10" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding OrderItems}" AutoGenerateColumns="False" SelectionMode="Single">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="ValidationErrorTemplate">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <TextBlock Text="!" Foreground="Red" ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}, Path=(Validation.Errors)[0].ErrorContent}" Margin="0" FontWeight="Bold" VerticalAlignment="Top" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style x:Key="readOnlyControl" TargetType="{x:Type Control}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.NotDecorated}">
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Cancelled}">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Confirmed}">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Processing}">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}"></DataGridCheckBoxColumn>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Item.Product.Name}" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Item.Product.Price.Price, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Quantity">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox LostFocus="QuantityTextBox_LostFocus" Style="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}">
+                                    <TextBox.Text>
+                                        <Binding Path="Item.Quantity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                            <Binding.ValidationRules>
+                                                <validators:QuantityValidator></validators:QuantityValidator>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Total" Binding="{Binding Item.TotalPrice, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Padding="16, 0" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}" IsDefault="True">Save</Button>
+                <Button Padding="16, 0" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}" IsCancel="True">Cancel</Button>
+            </StackPanel>
         </Grid>
-        <DataGrid Name="orderItemList" Grid.Row="1" Margin="10" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding OrderItems}" AutoGenerateColumns="False" SelectionMode="Single">
-            <DataGrid.Resources>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="ValidationErrorTemplate">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <TextBlock Text="!" Foreground="Red" ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}, Path=(Validation.Errors)[0].ErrorContent}" Margin="0" FontWeight="Bold" VerticalAlignment="Top" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <Style x:Key="readOnlyControl" TargetType="{x:Type Control}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.NotDecorated}">
-                            <Setter Property="IsEnabled" Value="True"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Cancelled}">
-                            <Setter Property="IsEnabled" Value="False"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Confirmed}">
-                            <Setter Property="IsEnabled" Value="False"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Processing}">
-                            <Setter Property="IsEnabled" Value="False"></Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}"></DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Item.Product.Name}" IsReadOnly="True"></DataGridTextColumn>
-                <DataGridTextColumn Header="Price" Binding="{Binding Item.Product.Price.Price, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
-                <DataGridTemplateColumn Header="Quantity">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox LostFocus="QuantityTextBox_LostFocus" Style="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}">
-                                <TextBox.Text>
-                                    <Binding Path="Item.Quantity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
-                                        <Binding.ValidationRules>
-                                            <validators:QuantityValidator></validators:QuantityValidator>
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Total" Binding="{Binding Item.TotalPrice, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="16, 0" Margin="5" Command="{Binding SaveOrderCommand, Mode=OneWay}" IsDefault="True">Save</Button>
-            <Button Padding="16, 0" Margin="5" Command="{Binding CancelCommand, Mode=OneWay}" IsCancel="True">Cancel</Button>
-        </StackPanel>
+        <controls:BusyLoader IsLoading="{Binding IsBusy}"/>
     </Grid>
 </Window>

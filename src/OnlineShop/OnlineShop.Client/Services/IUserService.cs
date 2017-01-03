@@ -9,10 +9,10 @@ namespace OnlineShop.Client.Services
 {
     interface IUserService
     {
-        UserDto Create(UserDto user);
-        void Delete(int id);
-        UserDto GetUser(int id);
-        IEnumerable<UserDto> GetUsers();
-        void Update(UserDto user);
+        Task<UserDto> CreateAsync(UserDto user);
+        Task DeleteAsync(int id);
+        Task<UserDto> GetUserAsync(int id);
+        Task<IEnumerable<UserDto>> GetUsersAsync();
+        Task UpdateAsync(UserDto user);
     }
 }
