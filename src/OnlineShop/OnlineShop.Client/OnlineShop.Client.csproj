@@ -73,6 +73,9 @@
     <Compile Include="Common\Messenger.cs" />
     <Compile Include="Common\ObjectCopier.cs" />
     <Compile Include="Common\WindowMessege.cs" />
+    <Compile Include="Controls\BusyLoader.xaml.cs">
+      <DependentUpon>BusyLoader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PasswordBoxAssistant.cs" />
     <Compile Include="Converters\UtcToLocalDateConverter.cs" />
     <Compile Include="Models\CheckableItem.cs" />
@@ -138,6 +141,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\BusyLoader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AuthenticationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

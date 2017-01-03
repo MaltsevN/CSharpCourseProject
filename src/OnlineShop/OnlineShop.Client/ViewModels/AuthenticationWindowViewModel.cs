@@ -26,6 +26,19 @@ namespace OnlineShop.Client.ViewModels
             this.userService = userService;
         }
 
+        private bool isBusy;
+
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
+
+
         #region SignInCommand
         private RelayCommand<object, object> signInCommand;
 
@@ -39,23 +52,26 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private void SignInCommandExecute(object obj)
+        private async void SignInCommandExecute(object obj)
         {
-            authService.SignIn(Login, Password);
-            if(authService.AuthenticationToken == null)
+            IsBusy = true;
+            await authService.SignIn(Login, Password);
+            if (authService.AuthenticationToken == null)
             {
                 messageService.ShowMessage("Unable to log in. Please check that you have entered your login and password correctly.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             else
             {
-                UserDto user = userService.GetUser(authService.AuthenticationToken.UserId);
-                if(user.Rank == RankDto.Client)
+                UserDto user = await userService.GetUserAsync(authService.AuthenticationToken.UserId);
+                if (user.Rank == RankDto.Client)
                 {
                     Messenger.Default.Send<WindowMessege, UserDto>(WindowMessege.OpenOrdersWindow, user);
                 }
 
                 Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
             }
+
+            IsBusy = false;
         }
 
         private bool SignInCommandCanExecute(object obj)

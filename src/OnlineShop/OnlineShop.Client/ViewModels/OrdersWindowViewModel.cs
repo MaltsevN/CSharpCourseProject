@@ -69,6 +69,17 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
+
         public OrdersWindowViewModel(IOrderService orderService, IMessegeManager messageService)
         {
             this.orderService = orderService;
@@ -121,8 +132,9 @@ namespace OnlineShop.Client.ViewModels
             return !string.IsNullOrEmpty(NewOrderName);
         }
 
-        private void AddNewOrderCommandExecute(object obj)
+        private async void AddNewOrderCommandExecute(object obj)
         {
+            IsBusy = true;
             OrderDto newOrder = new OrderDto()
             {
                 Name = NewOrderName,
@@ -138,12 +150,13 @@ namespace OnlineShop.Client.ViewModels
             };
 
 
-            OrderDto order = orderService.Create(newOrder);
+            OrderDto order = await orderService.CreateAsync(newOrder);
             User.Orders.Add(order);
             Orders.Add(order);
             clonedOrder = ObjectCopier.Clone<OrderDto>(order);
-            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+            IsBusy = false;
             NewOrderName = string.Empty;
+            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
         }
 
         #endregion
@@ -163,10 +176,12 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
+            IsBusy = true;
             foreach (var order in User.Orders)
             {
                 Orders.Add(order);
             }
+            IsBusy = false;
         }
         #endregion
 
@@ -183,14 +198,16 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private void DeleteOrderCommandExecute(object obj)
+        private async void DeleteOrderCommandExecute(object obj)
         {
             var result = messageService.ShowMessage("Are you sure you want to delete this order?", "Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
             if (result == System.Windows.MessageBoxResult.Yes)
             {
-                orderService.Delete(SelectedOrder.Id);
+                IsBusy = true;
+                await orderService.DeleteAsync(SelectedOrder.Id);
                 User.Orders.Remove(SelectedOrder);
                 Orders.Remove(SelectedOrder);
+                IsBusy = false;
             }
         }
 
@@ -212,12 +229,14 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private void ConfirmOrderCommandExecute(object obj)
+        private async void ConfirmOrderCommandExecute(object obj)
         {
+            IsBusy = true;
             SelectedOrder.Status = StatusDto.Processing;
-            orderService.Update(SelectedOrder);
+            await orderService.UpdateAsync(SelectedOrder);
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
+            IsBusy = false;
         }
 
         private bool ConfirmOrderCommandCanExecute(object obj)
@@ -238,12 +257,14 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private void CancelOrderCommandExecute(object obj)
+        private async void CancelOrderCommandExecute(object obj)
         {
+            IsBusy = true;
             SelectedOrder.Status = StatusDto.NotDecorated;
-            orderService.Update(SelectedOrder);
+            await orderService.UpdateAsync(SelectedOrder);
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
+            IsBusy = false;
         }
 
         private bool CancelOrderCommandCanExecute(object obj)

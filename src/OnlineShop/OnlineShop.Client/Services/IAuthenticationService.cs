@@ -10,6 +10,6 @@ namespace OnlineShop.Client.Services
     interface IAuthenticationService
     {
         AuthenticationTokenDto AuthenticationToken { get; }
-        void SignIn(string login, string password);
+        Task SignIn(string login, string password);
     }
 }

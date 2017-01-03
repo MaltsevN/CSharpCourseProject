@@ -20,6 +20,17 @@ namespace OnlineShop.Client.ViewModels
         private readonly IProductService productService;
         private ICollectionView collectionView;
 
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
+
         public EditOrderWindowViewModel(IOrderItemService orderItemService, IProductService productService)
         {
             this.orderItemService = orderItemService;
@@ -70,9 +81,10 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private void WindowLoadedCommandExecute(object obj)
+        private async void WindowLoadedCommandExecute(object obj)
         {
-            foreach (ProductDto product in productService.GetProducts())
+            IsBusy = true;
+            foreach (ProductDto product in await productService.GetProductsAsync())
             {
                 OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
                 if (orderItem != null)
@@ -91,6 +103,7 @@ namespace OnlineShop.Client.ViewModels
                     });
                 }
             }
+            IsBusy = false;
         }
         #endregion
 
@@ -112,8 +125,9 @@ namespace OnlineShop.Client.ViewModels
             return Order != null && Order.Status == StatusDto.NotDecorated;
         }
 
-        private void SaveOrderCommandExecute(object obj)
+        private async void SaveOrderCommandExecute(object obj)
         {
+            IsBusy = true;
             var existingOrderItems = Order.OrderItems;
             var newOrderItems = OrderItems.Where(checkableItem => checkableItem.IsChecked).Select(checkableItem => checkableItem.Item);
 
@@ -124,24 +138,25 @@ namespace OnlineShop.Client.ViewModels
             foreach (OrderItemDto orderItem in addedOrderItems)
             {
                 orderItem.OrderId = Order.Id;
-                var createdOrderItem = orderItemService.Create(orderItem);
+                var createdOrderItem = await orderItemService.CreateAsync(orderItem);
                 Order.OrderItems.Add(createdOrderItem);
             }
 
             foreach (OrderItemDto orderItem in deletedOrderItems)
             {
-                orderItemService.Delete(orderItem.Id);
+                await orderItemService.DeleteAsync(orderItem.Id);
                 Order.OrderItems.Remove(orderItem);
             }
 
             foreach (OrderItemDto orderItem in updatedOrderItems)
             {
-                orderItemService.Update(orderItem);
+                await orderItemService.UpdateAsync(orderItem);
                 var tempOrderItem = Order.OrderItems.Find(o => o.Id == orderItem.Id);
                 Order.OrderItems.Remove(tempOrderItem);
                 Order.OrderItems.Add(orderItem);
             }
 
+            IsBusy = false;
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, true);
         }
         #endregion

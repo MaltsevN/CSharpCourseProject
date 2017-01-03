@@ -20,14 +20,14 @@ namespace OnlineShop.Client.Services
             serializer = new JavaScriptSerializer();
         }
 
-        public UserDto Create(UserDto user)
+        public async Task<UserDto> CreateAsync(UserDto user)
         {
             string jsonRequest = serializer.Serialize(user);
             string requestUri = Properties.Resources.UrlToServer + "User/Create";
-            var responseMessage = client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
             if (responseMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responseMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
                 user = serializer.Deserialize<UserDto>(jsonResult);
             }
             else
@@ -38,7 +38,7 @@ namespace OnlineShop.Client.Services
             return user;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             string jsonRequest = serializer.Serialize(id.ToString());
             string requestUri = Properties.Resources.UrlToServer + "User/Delete";
@@ -48,41 +48,41 @@ namespace OnlineShop.Client.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(requestUri)
             };
-            var responseMessage = client.SendAsync(request).Result;
+            var responseMessage = await client.SendAsync(request);
         }
 
-        public UserDto GetUser(int id)
+        public async Task<UserDto> GetUserAsync(int id)
         {
             UserDto user = null;
             string requestUri = Properties.Resources.UrlToServer + "User/GetUser/" + id;
-            var responceMessage = client.GetAsync(requestUri).Result;
+            var responceMessage = await client.GetAsync(requestUri);
             if (responceMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
                 user = serializer.Deserialize<UserDto>(jsonResult);
             }
             return user;
         }
 
-        public IEnumerable<UserDto> GetUsers()
+        public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
             IEnumerable<UserDto> users = new UserDto[0];
             string requestUri = Properties.Resources.UrlToServer + "User/GetAllUsers";
-            var responceMessage = client.GetAsync(requestUri).Result;
+            var responceMessage = await client.GetAsync(requestUri);
             if (responceMessage.IsSuccessStatusCode)
             {
-                string jsonResult = responceMessage.Content.ReadAsStringAsync().Result;
+                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
                 users = serializer.Deserialize<IEnumerable<UserDto>>(jsonResult);
             }
 
             return users;
         }
 
-        public void Update(UserDto user)
+        public async Task UpdateAsync(UserDto user)
         {
             string jsonRequest = serializer.Serialize(user);
             string requestUri = Properties.Resources.UrlToServer + "User/Update";
-            var responseMessage = client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
         }
     }
 }
