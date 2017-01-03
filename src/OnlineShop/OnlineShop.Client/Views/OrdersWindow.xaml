@@ -11,7 +11,7 @@
         xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
         mc:Ignorable="d"
         Name="window"
-        Title="Online shop - Orders" WindowStartupLocation="CenterScreen" FontSize="14" Icon="/OnlineShop.Client;component/Images/AppIcon.ico">
+        Title="Online shop - Orders" WindowStartupLocation="CenterScreen" FontSize="14" Icon="/OnlineShop.Client;component/Images/AppIcon.ico" Background="WhiteSmoke">
     <Window.Resources>
         <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
         <converters:UtcToLocalDateConverter x:Key="utcToLocalDateConverter"></converters:UtcToLocalDateConverter>
@@ -46,8 +46,8 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox Name="newOrderNameTextBox" Grid.Column="0" VerticalAlignment="Center" Text="{Binding NewOrderName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Button Grid.Column="1" Padding="16, 0" Margin="5" Command="{Binding AddNewOrderCommand, Mode=OneWay}" IsDefault="True">Add new order</Button>
+                <TextBox Name="newOrderNameTextBox" Grid.Column="0" Text="{Binding NewOrderName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Padding="24, 2" Margin="5" Command="{Binding AddNewOrderCommand, Mode=OneWay}" IsDefault="True">Add new order</Button>
             </Grid>
             <Grid Grid.Row="1" Margin="10,0">
                 <Grid.ColumnDefinitions>
@@ -74,11 +74,11 @@
                 </ListView.View>
             </ListView>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Padding="16, 0" Margin="5" Command="{Binding EditOrderCommand, Mode=OneWay}">Edit</Button>
-                <Button Padding="16, 0" Margin="5" Command="{Binding DeleteOrderCommand, Mode=OneWay}">Delete</Button>
-                <Button Padding="16, 0" Margin="5" Content="Submit order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
+                <Button Padding="24, 5" Margin="5" Command="{Binding EditOrderCommand, Mode=OneWay}">Edit</Button>
+                <Button Padding="24, 5" Margin="5" Command="{Binding DeleteOrderCommand, Mode=OneWay}">Delete</Button>
+                <Button Padding="24, 5" Margin="5" Content="Submit order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.NotDecorated}">
                                     <Setter Property="Visibility" Value="Visible"></Setter>
@@ -96,9 +96,9 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Padding="16, 0" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}">
+                <Button Padding="24, 5" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.NotDecorated}">
                                     <Setter Property="Visibility" Value="Collapsed"></Setter>
