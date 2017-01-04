@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using OnlineShop.Client.Common;
+using System.Data;
 
 namespace OnlineShop.Client.Views
 {
@@ -37,9 +38,17 @@ namespace OnlineShop.Client.Views
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.ClosingEditOrderWindow, this.DialogResult);
         }
 
-        private void QuantityTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private bool isManualEditCommit;
+        private void orderItemList_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            CollectionViewSource.GetDefaultView(orderItemList.ItemsSource).Refresh();
+            if (!isManualEditCommit)
+            {
+                isManualEditCommit = true;
+                DataGrid grid = (DataGrid)sender;
+                grid.CommitEdit(DataGridEditingUnit.Row, true);
+                CollectionViewSource.GetDefaultView(orderItemList.ItemsSource).Refresh();
+                isManualEditCommit = false;
+            }
         }
     }
 }
