@@ -37,6 +37,22 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
+        private ObservableCollection<StatusDto> StatusesObsCol { get; set; }
+                 
+        private StatusDto selectedStatus;
+        public StatusDto SelectedStatus
+        {
+            get
+            {
+                return selectedStatus;
+            }
+            set
+            {
+                selectedStatus = value;
+                OnPropertyChanged(nameof(selectedStatus));
+            }
+        }
+
         private string searchString = string.Empty;
         public string SearchString
         {
@@ -68,8 +84,10 @@ namespace OnlineShop.Client.ViewModels
             this.orderService = orderService;
             this.messageService = messageService;
             OrdersObsCol = new ObservableCollection<OrderDto>();
+            StatusesObsCol = new ObservableCollection<StatusDto>();
             collectionView = CollectionViewSource.GetDefaultView(OrdersObsCol);
             collectionView.Filter = SearchFilter;
+            collectionView.Filter += StatusFilter;
             Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingOrderDetailsWindow, ClosingOrderDetailsWindow);//details
         }
 
@@ -96,6 +114,17 @@ namespace OnlineShop.Client.ViewModels
             return order.Name.ToLower().Contains(SearchString.ToLower());
         }
 
+        private bool StatusFilter(object obj)
+        {
+            OrderDto order = obj as OrderDto;
+            if (order == null)
+                return false;
+
+            if (order.Status == SelectedStatus)
+                return true;
+            else return false;
+        }
+
         #region WindowLoadedCommand
         private RelayCommand<object, object> windowLoadedCommand;
 
@@ -112,10 +141,14 @@ namespace OnlineShop.Client.ViewModels
         private async void WindowLoadedCommandExecute(object obj)
         {
             IsBusy = true;
+            foreach (var item in Enum.GetValues(typeof(StatusDto)).Cast<StatusDto>())
+            {
+                StatusesObsCol.Add(item);
+            }
+            CollectionViewSource.GetDefaultView(StatusesObsCol).Refresh();
             foreach (var order in await orderService.GetOrdersAsync())
             {
-                if(order.Status == StatusDto.Processing)
-                    OrdersObsCol.Add(order);
+                OrdersObsCol.Add(order);
             }
             IsBusy = false;
         }
@@ -180,7 +213,7 @@ namespace OnlineShop.Client.ViewModels
         #region DetailsCommand
         private RelayCommand<object, object> detailsCommand;
 
-        public ICommand OrderDetailsCommand
+        public ICommand AdminOrderDetailsCommand
         {
             get
             {
@@ -203,6 +236,7 @@ namespace OnlineShop.Client.ViewModels
         }
 
         #endregion
+        
     }
 }
 

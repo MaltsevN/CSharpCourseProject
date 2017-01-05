@@ -27,6 +27,7 @@ namespace OnlineShop.Client.Views
             InitializeComponent();
             Messenger.Default.Register<WindowMessege, object>(this, WindowMessege.CloseAuthenticationWindow, CloseAuthenticationWindow);
             Messenger.Default.Register<WindowMessege, UserDto>(this, WindowMessege.OpenOrdersWindow, OpenOrdersWindow);
+            Messenger.Default.Register<WindowMessege, UserDto>(this, WindowMessege.OpenAdminOrderWindow, OpenAdminOrderWindow);
         }
 
         private void OpenOrdersWindow(UserDto user)
@@ -34,6 +35,13 @@ namespace OnlineShop.Client.Views
             OrdersWindow window = new OrdersWindow();
             var viewModel = (OrdersWindowViewModel)window.DataContext;
             viewModel.User = user;
+            window.Show();
+        }
+
+        private void OpenAdminOrderWindow(UserDto user)
+        {
+            AdminOrdersWindow window = new AdminOrdersWindow();
+            var viewModel = (AdminOrdersWindowViewModel)window.DataContext;
             window.Show();
         }
 
@@ -46,6 +54,7 @@ namespace OnlineShop.Client.Views
         {
             Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseAuthenticationWindow);
             Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.OpenOrdersWindow);
+            Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.OpenAdminOrderWindow);
         }
     }
 }

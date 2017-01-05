@@ -18,6 +18,7 @@ namespace OnlineShop.Client.Common
 
         CloseAuthenticationWindow,
 
-        OpenOrdersWindow
+        OpenOrdersWindow,
+        OpenAdminOrderWindow
     }
 }

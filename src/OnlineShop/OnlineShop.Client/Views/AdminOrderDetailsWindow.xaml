@@ -71,18 +71,10 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}" IsReadOnly="True"></DataGridCheckBoxColumn>
                     <DataGridTextColumn Header="Name" Binding="{Binding Item.Product.Name}" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Header="Price" Binding="{Binding Item.Product.Price.Price, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Quantity" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}" >
-                        <DataGridTextColumn.Binding>
-                            <Binding Path="Item.Quantity" Mode="TwoWay" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True">
-                                <Binding.ValidationRules>
-                                    <validators:QuantityValidator></validators:QuantityValidator>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Item.Quantity}" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Header="Total" Binding="{Binding Item.TotalPrice, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
@@ -90,6 +82,6 @@
                 <Button Padding="24, 5" Margin="5" Command="{Binding CloseCommand, Mode=OneWay}" IsCancel="True">Close</Button>
             </StackPanel>
         </Grid>
-        <controls:BusyLoader IsLoading="{Binding IsBusy}" Loaded="BusyLoader_Loaded"/>
+        <controls:BusyLoader IsLoading="{Binding IsBusy}" />
     </Grid>
 </Window>
