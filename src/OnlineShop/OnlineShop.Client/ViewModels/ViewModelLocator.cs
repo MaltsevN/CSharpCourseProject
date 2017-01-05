@@ -35,6 +35,7 @@ namespace OnlineShop.Client.ViewModels
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
             builder.RegisterType<EditOrderWindowViewModel>().AsSelf();
             builder.RegisterType<AuthenticationWindowViewModel>().AsSelf();
+            builder.RegisterType<AdminOrdersWindowViewModel>().AsSelf();
 
             container = builder.Build();
         }

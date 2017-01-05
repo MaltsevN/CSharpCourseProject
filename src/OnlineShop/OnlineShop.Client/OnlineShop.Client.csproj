@@ -90,11 +90,19 @@
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Validators\QuantityValidator.cs" />
+    <Compile Include="ViewModels\AdminOrderDetailsViewModel.cs" />
+    <Compile Include="ViewModels\AdminOrdersWindowViewModel.cs" />
     <Compile Include="ViewModels\AuthenticationWindowViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\EditOrderWindowViewModel.cs" />
     <Compile Include="ViewModels\OrdersWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\AdminOrderDetailsWindow.xaml.cs">
+      <DependentUpon>AdminOrderDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdminOrdersWindow.xaml.cs">
+      <DependentUpon>AdminOrdersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AuthenticationWindow.xaml.cs">
       <DependentUpon>AuthenticationWindow.xaml</DependentUpon>
     </Compile>
@@ -146,6 +154,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FlatButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdminOrderDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdminOrdersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

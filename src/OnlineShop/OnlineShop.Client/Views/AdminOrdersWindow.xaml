@@ -1,0 +1,96 @@
+﻿<Window x:Class="OnlineShop.Client.Views.AdminOrdersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:OnlineShop.Client.Views"
+        xmlns:viewModels="clr-namespace:OnlineShop.Client.ViewModels"
+        xmlns:converters="clr-namespace:OnlineShop.Client.Converters"
+        xmlns:controls="clr-namespace:OnlineShop.Client.Controls"
+        xmlns:dto="clr-namespace:OnlineShop.DTO;assembly=OnlineShop.DTO"
+        mc:Ignorable="d"
+        Name="window"
+        Title="Online shop - Orders (Admin mode)" WindowStartupLocation="CenterScreen" FontSize="14" Icon="/OnlineShop.Client;component/Images/AppIcon.ico" Background="WhiteSmoke">
+    <Window.Resources>
+        <viewModels:ViewModelLocator x:Key="locator"></viewModels:ViewModelLocator>
+        <converters:UtcToLocalDateConverter x:Key="utcToLocalDateConverter"></converters:UtcToLocalDateConverter>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Mode="OneWay" Path="AdminOrdersWindowViewModel" Source="{StaticResource locator}"/>
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,10,0">Search:</TextBlock>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </Grid>
+        <ListView Grid.Row="1" Margin="10,5" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding EditOrderCommand, Mode=OneWay}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate, Converter={StaticResource utcToLocalDateConverter}}" />
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Padding="24, 5" Margin="5" Content="Details" Command="{Binding AdminOrderDetailsCommand, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}"></Style>
+                </Button.Style>
+            </Button>
+            <Button Padding="24, 5" Margin="5" Content="Confirm order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Padding="24, 5" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+        <controls:BusyLoader IsLoading="{Binding IsBusy}"/>
+    </Grid>
+</Window>
