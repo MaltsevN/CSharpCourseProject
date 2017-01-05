@@ -27,84 +27,52 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Margin="0,0,10,0">Search:</TextBlock>
-            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-        </Grid>
-        <Grid Grid.Row="1" Margin="10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="54"></ColumnDefinition>
-                <ColumnDefinition Width="156"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Margin="0,0,10,0" Text="Status filter:"/>
-            <ComboBox Height="26" Grid.Column="1" Margin="0,-4,0,4" VerticalAlignment="Center" ItemsSource="{Binding StatusesObsCol}" SelectedItem="{Binding SelectedStatus}">
-                <Label>NotDecorated</Label>
-                <Label>Processing</Label>
-                <Label>Confirmed</Label>
-                <Label>Cancelled</Label>
-            </ComboBox>
-        </Grid>
-        <ListView Grid.Row="2" Margin="10,5" ItemsSource="{Binding OrdersObsCol}" SelectedItem="{Binding SelectedOrder}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding EditOrderCommand, Mode=OneWay}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="0,0,10,0">Search:</TextBlock>
+                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </Grid>
+            <Grid Grid.Row="1" Margin="10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="54"></ColumnDefinition>
+                    <ColumnDefinition Width="156"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="0,0,10,0" Text="Status filter:"/>
+                <ComboBox Height="26" Grid.Column="1" Margin="0,-4,0,4" VerticalAlignment="Center" ItemsSource="{Binding StatusesObsCol}" SelectedItem="{Binding SelectedStatus}">
+                </ComboBox>
+            </Grid>
+            <ListView Grid.Row="2" Margin="10,5" ItemsSource="{Binding OrdersObsCol}" SelectedItem="{Binding SelectedOrder}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding AdminOrderDetailsCommand, Mode=OneWay}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate, Converter={StaticResource utcToLocalDateConverter}}" />
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
-                    <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Padding="24, 5" Margin="5" Content="Details" Command="{Binding AdminOrderDetailsCommand, Mode=OneWay}">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}"></Style>
-                </Button.Style>
-            </Button>
-            <Button Padding="24, 5" Margin="5" Content="Confirm order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
-                                <Setter Property="Visibility" Value="Visible"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Padding="24, 5" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedOrder.Status}" Value="{x:Static dto:StatusDto.Processing}">
-                                <Setter Property="Visibility" Value="Visible"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedOrder}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </StackPanel>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate, Converter={StaticResource utcToLocalDateConverter}}" />
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                        <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Padding="24, 5" Margin="5" Content="Details" Command="{Binding AdminOrderDetailsCommand, Mode=OneWay}"></Button>
+                <Button Padding="24, 5" Margin="5" Content="Confirm order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}"></Button>
+                <Button Padding="24, 5" Margin="5" Content="Cancel order" Command="{Binding CancelOrderCommand, Mode=OneWay}"></Button>
+            </StackPanel>
+        </Grid>
         <controls:BusyLoader IsLoading="{Binding IsBusy}"/>
     </Grid>
 </Window>

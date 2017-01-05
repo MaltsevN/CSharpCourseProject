@@ -37,9 +37,9 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private ObservableCollection<StatusDto> StatusesObsCol { get; set; }
+        public ObservableCollection<StatusDto> StatusesObsCol { get; set; }
                  
-        private StatusDto selectedStatus;
+        private StatusDto selectedStatus = StatusDto.Processing;
         public StatusDto SelectedStatus
         {
             get
@@ -50,6 +50,7 @@ namespace OnlineShop.Client.ViewModels
             {
                 selectedStatus = value;
                 OnPropertyChanged(nameof(selectedStatus));
+                collectionView.Refresh();
             }
         }
 
@@ -86,8 +87,7 @@ namespace OnlineShop.Client.ViewModels
             OrdersObsCol = new ObservableCollection<OrderDto>();
             StatusesObsCol = new ObservableCollection<StatusDto>();
             collectionView = CollectionViewSource.GetDefaultView(OrdersObsCol);
-            collectionView.Filter = SearchFilter;
-            collectionView.Filter += StatusFilter;
+            collectionView.Filter = Filter;
             Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingOrderDetailsWindow, ClosingOrderDetailsWindow);//details
         }
 
@@ -102,27 +102,16 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        private bool SearchFilter(object obj)
+        private bool Filter(object obj)
         {
             OrderDto order = obj as OrderDto;
             if (order == null)
                 return false;
 
             if (string.IsNullOrEmpty(SearchString))
-                return true;
+                return order.Status == SelectedStatus;
 
-            return order.Name.ToLower().Contains(SearchString.ToLower());
-        }
-
-        private bool StatusFilter(object obj)
-        {
-            OrderDto order = obj as OrderDto;
-            if (order == null)
-                return false;
-
-            if (order.Status == SelectedStatus)
-                return true;
-            else return false;
+            return order.Name.ToLower().Contains(SearchString.ToLower()) && order.Status == SelectedStatus;
         }
 
         #region WindowLoadedCommand
