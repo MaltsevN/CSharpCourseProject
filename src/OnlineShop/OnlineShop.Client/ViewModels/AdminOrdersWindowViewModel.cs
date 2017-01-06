@@ -21,8 +21,6 @@ namespace OnlineShop.Client.ViewModels
         
         public ObservableCollection<OrderDto> OrdersObsCol { get; private set; }
         
-        private OrderDto clonedOrder;
-
         private OrderDto selectedOrder;
         public OrderDto SelectedOrder
         {
