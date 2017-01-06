@@ -8,58 +8,47 @@ using DomainModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using OnlineShop.DTO;
-using AutoMapper;
+using OnlineShop.BL;
 
 namespace OnlineShop.ServiceContracts
 {
     public class UserContract : IUserContract
     {
-        IRepository<User> userRepository;
+        private readonly IUserManager userManager;
 
-        public UserContract(IUnitOfWork unitOfWork)
+        public UserContract(IUserManager userManager)
         {
-            this.userRepository = unitOfWork.UserRepository;
+            this.userManager = userManager;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public UserDto Create(UserDto item)
         {
-            User convertedUser = Mapper.Map<UserDto, User>(item);
-            User user = userRepository.Create(convertedUser);
-            userRepository.Save();
-            UserDto dto = Mapper.Map<User, UserDto>(user);
-            return dto;
+            return userManager.Create(item);
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
-            userRepository.Delete(id);
-            userRepository.Save();
+            userManager.Delete(id);
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetUser/{id}")]
         public UserDto GetItem(string id)
         {
-            User user = userRepository.GetItem(Convert.ToInt32(id));
-            UserDto dto = Mapper.Map<User, UserDto>(user);
-            return dto;
+            return userManager.GetUser(Convert.ToInt32(id));
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllUsers")]
         public IEnumerable<UserDto> GetItemsList()
         {
-            var items = userRepository.GetItemsList();
-            IEnumerable<UserDto> dtos = Mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(items);
-            return dtos;
+            return userManager.GetAllUsers();
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(UserDto item)
         {
-            User convertedUser = Mapper.Map<UserDto, User>(item);
-            userRepository.Update(convertedUser);
-            userRepository.Save();
+            
         }
     }
 }

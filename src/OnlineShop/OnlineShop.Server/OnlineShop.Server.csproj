@@ -111,6 +111,10 @@
       <Project>{bda236b8-5a90-40fa-be61-b6f4d88da58a}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OnlineShop.BL\OnlineShop.BL.csproj">
+      <Project>{331FA8B6-1D87-46EF-88E0-FB57B58408EE}</Project>
+      <Name>OnlineShop.BL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OnlineShop.DAL.EntityFramework\OnlineShop.DAL.EntityFramework.csproj">
       <Project>{D9ABDF6F-C378-4BA4-999D-10237F841862}</Project>
       <Name>OnlineShop.DAL.EntityFramework</Name>

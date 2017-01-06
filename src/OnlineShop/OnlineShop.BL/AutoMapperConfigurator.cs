@@ -7,13 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineShop.ServiceContracts
+namespace OnlineShop.BL
 {
     public class AutoMapperConfigurator
     {
+        private static bool isConfigured = false;
+
         public static void Configure()
         {
-            Mapper.Initialize(MapperConfig);
+            if (!isConfigured)
+            {
+                Mapper.Initialize(MapperConfig);
+                isConfigured = true;
+            }
         }
 
         private static void MapperConfig(IMapperConfigurationExpression config)

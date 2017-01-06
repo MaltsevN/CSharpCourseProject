@@ -12,6 +12,7 @@ using Autofac.Integration.Wcf;
 using DAL;
 using DomainModel;
 using OnlineShop.DAL.EntityFramework;
+using OnlineShop.BL;
 
 namespace OnlineShop.Server
 {
@@ -20,8 +21,6 @@ namespace OnlineShop.Server
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            AutoMapperConfigurator.Configure();
-
             var builder = new ContainerBuilder();
             builder.RegisterType<OrderContract>();
             builder.RegisterType<ProductContract>();
@@ -30,6 +29,12 @@ namespace OnlineShop.Server
             builder.RegisterType<AccountContract>();
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+
+            builder.RegisterType<AccountManager>().As<IAccountManager>();
+            builder.RegisterType<OrderItemManager>().As<IOrderItemManager>();
+            builder.RegisterType<OrderManager>().As<IOrderManager>();
+            builder.RegisterType<ProductManager>().As<IProductManager>();
+            builder.RegisterType<UserManager>().As<IUserManager>();
 
             AutofacHostFactory.Container = builder.Build();
 
