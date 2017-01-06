@@ -36,6 +36,8 @@ namespace OnlineShop.Server
             builder.RegisterType<ProductManager>().As<IProductManager>();
             builder.RegisterType<UserManager>().As<IUserManager>();
 
+            builder.RegisterType<AuthorizeAttribute>();
+
             AutofacHostFactory.Container = builder.Build();
 
             RouteTable.Routes.Add(new ServiceRoute("Order", new AutofacServiceHostFactory(), typeof(OrderContract)));

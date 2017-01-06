@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Web.Script.Serialization;
 using OnlineShop.DTO;
+using System.Net.Http.Headers;
 
 namespace OnlineShop.Client.Services
 {
@@ -14,10 +15,11 @@ namespace OnlineShop.Client.Services
         private readonly HttpClient client;
         private readonly JavaScriptSerializer serializer;
 
-        public ProductService()
+        public ProductService(IAuthenticationService authService)
         {
             client = new HttpClient();
             serializer = new JavaScriptSerializer();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authService.AuthenticationToken.Login + ":" + authService.AuthenticationToken.Token);
         }
 
         public async Task<ProductDto> CreateAsync(ProductDto product)
