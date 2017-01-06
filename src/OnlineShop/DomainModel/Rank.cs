@@ -10,7 +10,6 @@ namespace DomainModel
     public enum Rank
     {
         Client,
-        Admin,
-        HeadAdmin
+        Admin
     }
 }

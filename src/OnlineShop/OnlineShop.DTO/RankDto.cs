@@ -14,9 +14,6 @@ namespace OnlineShop.DTO
         Client,
 
         [EnumMember]
-        Admin,
-
-        [EnumMember]
-        HeadAdmin
+        Admin
     }
 }

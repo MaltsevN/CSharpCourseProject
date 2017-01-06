@@ -79,6 +79,13 @@ namespace OnlineShop.DAL.EntityFramework.Migrations
                 context.Users.AddOrUpdate(u => u.Id,                                    
                     new User() { Id = 1, Login = "TestUser", Name = "User", Password = "827ccb0eea8a706c4c34a16891f84e7b", Rank = Rank.Client, Orders = new List<Order>() { order1, order2, order3, order4 } });
             }
+
+            if (context.Users.FirstOrDefault(u => u.Login == "TestAdmin") == null)
+            {
+                //User password = 1234
+                context.Users.AddOrUpdate(u => u.Id,
+                    new User() { Id = 2, Login = "TestAdmin", Name = "Admin", Password = "81dc9bdb52d04dc20036dbd8313ed055", Rank = Rank.Admin });
+            }
             context.SaveChanges();
         }
     }
