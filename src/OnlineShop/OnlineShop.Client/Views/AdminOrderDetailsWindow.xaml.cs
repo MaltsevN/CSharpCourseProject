@@ -35,7 +35,6 @@ namespace OnlineShop.Client.Views
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Messenger.Default.Unregister<WindowMessege>(this, WindowMessege.CloseOrderDetailsWindow);
-            Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.ClosingOrderDetailsWindow, this.DialogResult);
         }
         
     }

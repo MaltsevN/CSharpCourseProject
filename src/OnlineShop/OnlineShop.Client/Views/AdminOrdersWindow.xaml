@@ -64,6 +64,7 @@
                         <GridViewColumn Header="Placing date" DisplayMemberBinding="{Binding PlacingDate, Converter={StaticResource utcToLocalDateConverter}}" />
                         <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
                         <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding TotalPrice, StringFormat=C, ConverterCulture=en-US}" />
+                        <GridViewColumn Header="User name" DisplayMemberBinding="{Binding User.Name}" />
                     </GridView>
                 </ListView.View>
             </ListView>

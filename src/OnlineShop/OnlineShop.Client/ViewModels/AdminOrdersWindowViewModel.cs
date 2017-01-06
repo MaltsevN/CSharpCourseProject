@@ -88,18 +88,6 @@ namespace OnlineShop.Client.ViewModels
             StatusesObsCol = new ObservableCollection<StatusDto>();
             collectionView = CollectionViewSource.GetDefaultView(OrdersObsCol);
             collectionView.Filter = Filter;
-            Messenger.Default.Register<WindowMessege, bool?>(this, WindowMessege.ClosingOrderDetailsWindow, ClosingOrderDetailsWindow);//details
-        }
-
-        private void ClosingOrderDetailsWindow(bool? dialogResult)
-        {
-            if (dialogResult == true)
-            {
-                OrderDto order = OrdersObsCol.First(o => o.Id == clonedOrder.Id);
-                order.OrderItems = clonedOrder.OrderItems;
-                SelectedOrder = order;
-                CollectionViewSource.GetDefaultView(OrdersObsCol).Refresh();
-            }
         }
 
         private bool Filter(object obj)
@@ -220,8 +208,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void DetailsCommandExecute(object obj)
         {
-            clonedOrder = ObjectCopier.Clone<OrderDto>(SelectedOrder);
-            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenOrderDetailsWindow, clonedOrder);
+            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenOrderDetailsWindow, SelectedOrder);
         }
 
         #endregion

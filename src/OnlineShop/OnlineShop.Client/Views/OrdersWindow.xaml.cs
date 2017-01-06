@@ -31,6 +31,7 @@ namespace OnlineShop.Client.Views
         private void OpenEtitOrderWindow(OrderDto order)
         {
             EditOrderWindow window = new EditOrderWindow();
+            window.Owner = this;
             var viewModel = (EditOrderWindowViewModel)window.DataContext;
             viewModel.Order = order;
             window.ShowDialog();

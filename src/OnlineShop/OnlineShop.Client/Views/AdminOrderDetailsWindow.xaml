@@ -50,28 +50,9 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                    <Style x:Key="readOnlyControl" TargetType="{x:Type Control}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.NotDecorated}">
-                                <Setter Property="IsEnabled" Value="True"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Cancelled}">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                                <Setter Property="Foreground" Value="Black"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Confirmed}">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                                <Setter Property="Foreground" Value="Black"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.Order.Status, ElementName=grid}" Value="{x:Static dto:StatusDto.Processing}">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                                <Setter Property="Foreground" Value="Black"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}" CellStyle="{Binding Mode=OneWay, Source={StaticResource readOnlyControl}}" IsReadOnly="True"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}" IsReadOnly="True"></DataGridCheckBoxColumn>
                     <DataGridTextColumn Header="Name" Binding="{Binding Item.Product.Name}" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Header="Price" Binding="{Binding Item.Product.Price.Price, StringFormat=C, ConverterCulture=en-US}" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Header="Quantity" Binding="{Binding Item.Quantity}" IsReadOnly="True"></DataGridTextColumn>

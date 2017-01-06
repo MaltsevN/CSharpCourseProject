@@ -93,14 +93,6 @@ namespace OnlineShop.Client.ViewModels
                         IsChecked = true
                     });
                 }
-                else
-                {
-                    orderItem = new OrderItemDto() { Product = product, Quantity = 1 };
-                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
-                    {
-                        IsChecked = false
-                    });
-                }
             }
             IsBusy = false;
         }

@@ -31,6 +31,7 @@ namespace OnlineShop.Client.Views
         private void OpenOrderDetailsWindow(OrderDto order)
         {
             AdminOrderDetailsWindow window = new AdminOrderDetailsWindow();
+            window.Owner = this;
             var viewModel = (AdminOrderDetailsViewModel)window.DataContext;
             viewModel.Order = order;
             window.ShowDialog();

@@ -14,7 +14,6 @@ namespace OnlineShop.Client.Common
 
         OpenOrderDetailsWindow,
         CloseOrderDetailsWindow,
-        ClosingOrderDetailsWindow,
 
         CloseAuthenticationWindow,
 
