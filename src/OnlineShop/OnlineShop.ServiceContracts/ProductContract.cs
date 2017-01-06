@@ -8,58 +8,47 @@ using DomainModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using OnlineShop.DTO;
-using AutoMapper;
+using OnlineShop.BL;
 
 namespace OnlineShop.ServiceContracts
 {
     public class ProductContract: IProductContract
     {
-        IRepository<Product> productRepository;
+        private readonly IProductManager productManager;
 
-        public ProductContract(IUnitOfWork unitOfWork)
+        public ProductContract(IProductManager productManager)
         {
-            this.productRepository = unitOfWork.ProductRepository;
+            this.productManager = productManager;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public ProductDto Create(ProductDto item)
         {
-            Product convertedProduct = Mapper.Map<ProductDto, Product>(item);
-            Product product = productRepository.Create(convertedProduct);
-            productRepository.Save();
-            ProductDto dto = Mapper.Map<Product, ProductDto>(product);
-            return dto;
+            return productManager.Create(item);
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
-            productRepository.Delete(id);
-            productRepository.Save();
+            productManager.Delete(id);
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetProduct/{id}")]
         public ProductDto GetItem(string id)
         {
-            Product product = productRepository.GetItem(Convert.ToInt32(id));
-            ProductDto dto = Mapper.Map<Product, ProductDto>(product);
-            return dto;
+            return productManager.GetProduct(Convert.ToInt32(id));
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllProducts")]
         public IEnumerable<ProductDto> GetItemsList()
         {
-            var items = productRepository.GetItemsList();
-            IEnumerable<ProductDto> dtos = Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(items);
-            return dtos;
+            return productManager.GetAllProducts();
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(ProductDto item)
         {
-            Product convertedOrder = Mapper.Map<ProductDto, Product>(item);
-            productRepository.Update(convertedOrder);
-            productRepository.Save();
+            
         }
     }
 }

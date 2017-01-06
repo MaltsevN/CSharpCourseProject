@@ -8,63 +8,47 @@ using DomainModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using OnlineShop.DTO;
-using AutoMapper;
+using OnlineShop.BL;
 
 namespace OnlineShop.ServiceContracts
 {
     public class OrderItemContract : IOrderItemContract
     {
-        IRepository<OrderItem> orderItemRepository;
-        IRepository<Order> orderRepository;
-        IRepository<Product> productRepository;
+        private readonly IOrderItemManager orderItemManager;
 
-        public OrderItemContract(IUnitOfWork unitOfWork)
+        public OrderItemContract(IOrderItemManager orderItemManager)
         {
-            this.orderItemRepository = unitOfWork.OrderItemRepository;
-            this.orderRepository = unitOfWork.OrderRepository;
-            this.productRepository = unitOfWork.ProductRepository;
+            this.orderItemManager = orderItemManager;
         }
 
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public OrderItemDto Create(OrderItemDto item)
         {
-            OrderItem convertedOrder = Mapper.Map<OrderItemDto, OrderItem>(item);
-            OrderItem orderItem = orderItemRepository.Create(convertedOrder);
-            orderItemRepository.Save();
-            OrderItemDto dto = Mapper.Map<OrderItem, OrderItemDto>(orderItem);
-            return dto;
+            return orderItemManager.Create(item);
         }
 
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Delete(int id)
         {
-            orderItemRepository.Delete(id);
-            orderItemRepository.Save();
+            orderItemManager.Delete(id);
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetOrderItem/{id}")]
         public OrderItemDto GetItem(string id)
         {
-            OrderItem orderItem = orderItemRepository.GetItem(Convert.ToInt32(id));
-            OrderItemDto dto = Mapper.Map<OrderItem, OrderItemDto>(orderItem);
-            orderItem = Mapper.Map<OrderItemDto, OrderItem>(dto);
-            return dto;
+            return orderItemManager.GetOrderItem(Convert.ToInt32(id));
         }
 
         [WebGet(ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, UriTemplate = "GetAllOrderItems")]
         public IEnumerable<OrderItemDto> GetItemsList()
         {
-            var items = orderItemRepository.GetItemsList();
-            IEnumerable<OrderItemDto> dtos = Mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemDto>>(items);
-            return dtos;
+            return orderItemManager.GetAllOrderItems();
         }
 
         [WebInvoke(Method = "PUT", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         public void Update(OrderItemDto item)
         {
-            OrderItem convertedOrder = Mapper.Map<OrderItemDto, OrderItem>(item);
-            orderItemRepository.Update(convertedOrder);
-            orderItemRepository.Save();
+            orderItemManager.Update(item);
         }
     }
 }
