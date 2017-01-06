@@ -67,6 +67,10 @@ namespace OnlineShop.Client.ViewModels
                 {
                     Messenger.Default.Send<WindowMessege, UserDto>(WindowMessege.OpenOrdersWindow, user);
                 }
+                if (user.Rank == RankDto.Admin)
+                {
+                    Messenger.Default.Send<WindowMessege, object>(WindowMessege.OpenAdminOrderWindow, null);
+                }
 
                 Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
             }

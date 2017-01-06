@@ -18,21 +18,21 @@ using OnlineShop.DTO;
 namespace OnlineShop.Client.Views
 {
     /// <summary>
-    /// Interaction logic for OrdersWindow.xaml
+    /// Interaction logic for AdminOrdersWindow.xaml
     /// </summary>
-    public partial class OrdersWindow : Window
+    public partial class AdminOrdersWindow : Window
     {
-        public OrdersWindow()
+        public AdminOrdersWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<WindowMessege, OrderDto>(this, WindowMessege.OpenEditOrderWindow, OpenEtitOrderWindow);
+            Messenger.Default.Register<WindowMessege, OrderDto>(this, WindowMessege.OpenOrderDetailsWindow, OpenOrderDetailsWindow);
         }
 
-        private void OpenEtitOrderWindow(OrderDto order)
+        private void OpenOrderDetailsWindow(OrderDto order)
         {
-            EditOrderWindow window = new EditOrderWindow();
+            AdminOrderDetailsWindow window = new AdminOrderDetailsWindow();
             window.Owner = this;
-            var viewModel = (EditOrderWindowViewModel)window.DataContext;
+            var viewModel = (AdminOrderDetailsViewModel)window.DataContext;
             viewModel.Order = order;
             window.ShowDialog();
         }

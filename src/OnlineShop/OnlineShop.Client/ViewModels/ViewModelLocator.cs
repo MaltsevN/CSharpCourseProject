@@ -35,6 +35,8 @@ namespace OnlineShop.Client.ViewModels
             builder.RegisterType<OrdersWindowViewModel>().AsSelf();
             builder.RegisterType<EditOrderWindowViewModel>().AsSelf();
             builder.RegisterType<AuthenticationWindowViewModel>().AsSelf();
+            builder.RegisterType<AdminOrdersWindowViewModel>().AsSelf();
+            builder.RegisterType<AdminOrderDetailsViewModel>().AsSelf();
 
             container = builder.Build();
         }
@@ -62,7 +64,20 @@ namespace OnlineShop.Client.ViewModels
                 return container.Resolve<EditOrderWindowViewModel>();
             }
         }
-
+        public AdminOrdersWindowViewModel AdminOrdersWindowViewModel
+        {
+            get
+            {
+                return container.Resolve<AdminOrdersWindowViewModel>();
+            }
+        }
+        public AdminOrderDetailsViewModel AdminOrderDetailsViewModel
+        {
+            get
+            {
+                return container.Resolve<AdminOrderDetailsViewModel>();
+            }
+        }
         public AuthenticationWindowViewModel AuthenticationWindowViewModel
         {
             get
