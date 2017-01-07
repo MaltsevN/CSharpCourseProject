@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:OnlineShop.Client"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
-             StartupUri="Views/AuthenticationWindow.xaml">
+             StartupUri="Views/AuthenticationWindow.xaml" Exit="Application_Exit">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

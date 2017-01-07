@@ -113,13 +113,13 @@ namespace OnlineShop.Client.ViewModels
             }
             catch (NoInternetConnectionException ex)
             {
-                Logger.For(this).Error(ex.Message);
+                Logger.For(this).Error(ex.Message, ex);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
             }
             catch (HttpRequestException ex)
             {
-                Logger.For(this).Error(ex.Message);
+                Logger.For(this).Error(ex.Message, ex);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
             }
@@ -190,12 +190,12 @@ namespace OnlineShop.Client.ViewModels
             }
             catch (NoInternetConnectionException ex)
             {
-                Logger.For(this).Error(ex.Message);
+                Logger.For(this).Error(ex.Message, ex);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             catch (HttpRequestException ex)
             {
-                Logger.For(this).Error(ex.Message);
+                Logger.For(this).Error(ex.Message, ex);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             IsBusy = false;

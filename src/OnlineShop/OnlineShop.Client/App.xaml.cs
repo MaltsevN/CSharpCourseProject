@@ -22,7 +22,12 @@ namespace OnlineShop.Client
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Logger.For(this).Fatal(e.Exception.Message);
+            Logger.For(this).Fatal(e.Exception.Message, e.Exception);
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            Logger.For(this).Info("Application Exit");
         }
     }
 }
