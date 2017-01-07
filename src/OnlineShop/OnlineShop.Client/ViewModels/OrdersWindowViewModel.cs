@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Client.Common;
+using OnlineShop.Client.Exceptions;
 using OnlineShop.Client.Services;
 using OnlineShop.DTO;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -149,14 +151,26 @@ namespace OnlineShop.Client.ViewModels
                 PlacingDate = DateTime.UtcNow
             };
 
-
-            OrderDto order = await orderService.CreateAsync(newOrder);
-            User.Orders.Add(order);
-            Orders.Add(order);
-            clonedOrder = ObjectCopier.Clone<OrderDto>(order);
+            try
+            {
+                OrderDto order = await orderService.CreateAsync(newOrder);
+                User.Orders.Add(order);
+                Orders.Add(order);
+                clonedOrder = ObjectCopier.Clone<OrderDto>(order);
+                IsBusy = false;
+                NewOrderName = string.Empty;
+                Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+            }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
             IsBusy = false;
-            NewOrderName = string.Empty;
-            Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+
         }
 
         #endregion
@@ -204,9 +218,21 @@ namespace OnlineShop.Client.ViewModels
             if (result == System.Windows.MessageBoxResult.Yes)
             {
                 IsBusy = true;
-                await orderService.DeleteAsync(SelectedOrder.Id);
-                User.Orders.Remove(SelectedOrder);
-                Orders.Remove(SelectedOrder);
+                try
+                {
+                    await orderService.DeleteAsync(SelectedOrder.Id);
+                    User.Orders.Remove(SelectedOrder);
+                    Orders.Remove(SelectedOrder);
+                }
+                catch (NoInternetConnectionException ex)
+                {
+                    messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+                catch (HttpRequestException ex)
+                {
+                    messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+                
                 IsBusy = false;
             }
         }
@@ -233,7 +259,21 @@ namespace OnlineShop.Client.ViewModels
         {
             IsBusy = true;
             SelectedOrder.Status = StatusDto.Processing;
-            await orderService.UpdateAsync(SelectedOrder);
+            try
+            {
+                await orderService.UpdateAsync(SelectedOrder);
+            }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.NotDecorated;
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.NotDecorated;
+            }
+            
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
             IsBusy = false;
@@ -261,7 +301,21 @@ namespace OnlineShop.Client.ViewModels
         {
             IsBusy = true;
             SelectedOrder.Status = StatusDto.NotDecorated;
-            await orderService.UpdateAsync(SelectedOrder);
+            try
+            {
+                await orderService.UpdateAsync(SelectedOrder);
+            }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            
             CollectionViewSource.GetDefaultView(Orders).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
             IsBusy = false;

@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Controls\PasswordBoxAssistant.cs" />
     <Compile Include="Converters\UtcToLocalDateConverter.cs" />
+    <Compile Include="Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Models\CheckableItem.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />

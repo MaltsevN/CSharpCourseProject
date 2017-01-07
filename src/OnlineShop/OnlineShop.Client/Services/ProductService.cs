@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Web.Script.Serialization;
 using OnlineShop.DTO;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
@@ -26,18 +28,29 @@ namespace OnlineShop.Client.Services
         {
             string jsonRequest = serializer.Serialize(product);
             string requestUri = Properties.Resources.UrlToServer + "Product/Create";
-            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-            if (responseMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
-                product = serializer.Deserialize<ProductDto>(jsonResult);
-            }
-            else
-            {
-                product = null;
-            }
+                var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responseMessage.Content.ReadAsStringAsync();
+                    product = serializer.Deserialize<ProductDto>(jsonResult);
+                }
+                else
+                {
+                    product = null;
+                }
 
-            return product;
+                return product;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task DeleteAsync(int id)
@@ -50,41 +63,87 @@ namespace OnlineShop.Client.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(requestUri)
             };
-            var responseMessage = await client.SendAsync(request);
+
+            try
+            {
+                var responseMessage = await client.SendAsync(request);
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
+            
         }
 
         public async Task<ProductDto> GetProductAsync(int id)
         {
             ProductDto product = null;
             string requestUri = Properties.Resources.UrlToServer + "Product/GetProduct/" + id;
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                product = serializer.Deserialize<ProductDto>(jsonResult);
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    product = serializer.Deserialize<ProductDto>(jsonResult);
+                }
+                return product;
             }
-            return product;
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         {
             IEnumerable<ProductDto> products = new ProductDto[0];
             string requestUri = Properties.Resources.UrlToServer + "Product/GetAllProducts";
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                products = serializer.Deserialize<IEnumerable<ProductDto>>(jsonResult);
-            }
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    products = serializer.Deserialize<IEnumerable<ProductDto>>(jsonResult);
+                }
 
-            return products;
+                return products;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task UpdateAsync(ProductDto product)
         {
             string jsonRequest = serializer.Serialize(product);
             string requestUri = Properties.Resources.UrlToServer + "Product/Update";
-            var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            try
+            {
+                var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
     }
 }

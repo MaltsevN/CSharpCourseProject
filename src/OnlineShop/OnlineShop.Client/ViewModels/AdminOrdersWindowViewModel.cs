@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Client.Common;
+using OnlineShop.Client.Exceptions;
 using OnlineShop.Client.Services;
 using OnlineShop.DTO;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -121,10 +123,22 @@ namespace OnlineShop.Client.ViewModels
                 StatusesObsCol.Add(item);
             }
             CollectionViewSource.GetDefaultView(StatusesObsCol).Refresh();
-            foreach (var order in await orderService.GetOrdersAsync())
+            try
             {
-                OrdersObsCol.Add(order);
+                foreach (var order in await orderService.GetOrdersAsync())
+                {
+                    OrdersObsCol.Add(order);
+                }
             }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            
             IsBusy = false;
         }
         #endregion
@@ -145,7 +159,21 @@ namespace OnlineShop.Client.ViewModels
         {
             IsBusy = true;
             SelectedOrder.Status = StatusDto.Confirmed;
-            await orderService.UpdateAsync(SelectedOrder);
+            try
+            {
+                await orderService.UpdateAsync(SelectedOrder);
+            }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            
             CollectionViewSource.GetDefaultView(OrdersObsCol).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
             IsBusy = false;
@@ -173,7 +201,21 @@ namespace OnlineShop.Client.ViewModels
         {
             IsBusy = true;
             SelectedOrder.Status = StatusDto.Cancelled;
-            await orderService.UpdateAsync(SelectedOrder);
+            try
+            {
+                await orderService.UpdateAsync(SelectedOrder);
+            }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                SelectedOrder.Status = StatusDto.Processing;
+            }
+            
             CollectionViewSource.GetDefaultView(OrdersObsCol).Refresh();
             OnPropertyChanged(nameof(SelectedOrder));
             IsBusy = false;

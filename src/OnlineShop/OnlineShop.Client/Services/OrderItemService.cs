@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Web.Script.Serialization;
 using OnlineShop.DTO;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
@@ -27,18 +29,29 @@ namespace OnlineShop.Client.Services
         {
             string jsonRequest = serializer.Serialize(orderItem);
             string requestUri = Properties.Resources.UrlToServer + "OrderItem/Create";
-            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-            if (responseMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
-                orderItem = serializer.Deserialize<OrderItemDto>(jsonResult);
-            }
-            else
-            {
-                orderItem = null;
-            }
+                var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responseMessage.Content.ReadAsStringAsync();
+                    orderItem = serializer.Deserialize<OrderItemDto>(jsonResult);
+                }
+                else
+                {
+                    orderItem = null;
+                }
 
-            return orderItem;
+                return orderItem;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task DeleteAsync(int id)
@@ -51,41 +64,87 @@ namespace OnlineShop.Client.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(requestUri)
             };
-            var responseMessage = await client.SendAsync(request);
+
+            try
+            {
+                var responseMessage = await client.SendAsync(request);
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task<OrderItemDto> GetOrderItemAsync(int id)
         {
             OrderItemDto orderItem = null;
             string requestUri = Properties.Resources.UrlToServer + "OrderItem/GetOrderItem/" + id;
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                orderItem = serializer.Deserialize<OrderItemDto>(jsonResult);
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    orderItem = serializer.Deserialize<OrderItemDto>(jsonResult);
+                }
+                return orderItem;
             }
-            return orderItem;
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<OrderItemDto>> GetOrderItemsAsync()
         {
             IEnumerable<OrderItemDto> orderItems = new OrderItemDto[0];
             string requestUri = Properties.Resources.UrlToServer + "OrderItem/GetAllOrderItems";
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                orderItems = serializer.Deserialize<IEnumerable<OrderItemDto>>(jsonResult);
-            }
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    orderItems = serializer.Deserialize<IEnumerable<OrderItemDto>>(jsonResult);
+                }
 
-            return orderItems;
+                return orderItems;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
+            
         }
 
         public async Task UpdateAsync(OrderItemDto orderItem)
         {
             string jsonRequest = serializer.Serialize(orderItem);
             string requestUri = Properties.Resources.UrlToServer + "OrderItem/Update";
-            var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            try
+            {
+                var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
     }
 }
