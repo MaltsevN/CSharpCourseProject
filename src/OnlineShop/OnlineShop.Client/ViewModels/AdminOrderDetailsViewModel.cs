@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Client.Common;
+using OnlineShop.Client.Exceptions;
 using OnlineShop.Client.Models;
 using OnlineShop.Client.Services;
 using OnlineShop.DTO;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -18,6 +20,7 @@ namespace OnlineShop.Client.ViewModels
     {
         private readonly IOrderItemService orderItemService;
         private readonly IProductService productService;
+        private readonly IMessegeManager messageService;
         private readonly ICollectionView collectionView;
 
         private bool isBusy;
@@ -58,10 +61,11 @@ namespace OnlineShop.Client.ViewModels
 
         public ObservableCollection<CheckableItem<OrderItemDto>> OrderItems { get; set; }
 
-        public AdminOrderDetailsViewModel(IOrderItemService orderItemService, IProductService productService)
+        public AdminOrderDetailsViewModel(IOrderItemService orderItemService, IProductService productService, IMessegeManager messageManager)
         {
             this.orderItemService = orderItemService;
             this.productService = productService;
+            this.messageService = messageManager;
             OrderItems = new ObservableCollection<CheckableItem<OrderItemDto>>();
             collectionView = CollectionViewSource.GetDefaultView(OrderItems);
             collectionView.Filter = SearchFilter;
@@ -83,17 +87,32 @@ namespace OnlineShop.Client.ViewModels
         private async void WindowLoadedCommandExecute(object obj)
         {
             IsBusy = true;
-            foreach (ProductDto product in await productService.GetProductsAsync())
+            try
             {
-                OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
-                if (orderItem != null)
+                var products = await productService.GetProductsAsync();
+                foreach (ProductDto product in products)
                 {
-                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                    OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
+                    if (orderItem != null)
                     {
-                        IsChecked = true
-                    });
+                        OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                        {
+                            IsChecked = true
+                        });
+                    }
                 }
             }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseOrderDetailsWindow, false);
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseOrderDetailsWindow, false);
+            }
+            
             IsBusy = false;
         }
         #endregion

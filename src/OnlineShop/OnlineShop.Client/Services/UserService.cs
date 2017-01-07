@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Web.Script.Serialization;
 using OnlineShop.DTO;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
@@ -28,18 +30,30 @@ namespace OnlineShop.Client.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authService.AuthenticationToken.Login + ":" + authService.AuthenticationToken.Token);
             string jsonRequest = serializer.Serialize(user);
             string requestUri = Properties.Resources.UrlToServer + "User/Create";
-            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-            if (responseMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
-                user = serializer.Deserialize<UserDto>(jsonResult);
-            }
-            else
-            {
-                user = null;
-            }
+                var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responseMessage.Content.ReadAsStringAsync();
+                    user = serializer.Deserialize<UserDto>(jsonResult);
+                }
+                else
+                {
+                    user = null;
+                }
 
-            return user;
+                return user;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
+            
         }
 
         public async Task DeleteAsync(int id)
@@ -53,7 +67,19 @@ namespace OnlineShop.Client.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(requestUri)
             };
-            var responseMessage = await client.SendAsync(request);
+
+            try
+            {
+                var responseMessage = await client.SendAsync(request);
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task<UserDto> GetUserAsync(int id)
@@ -61,13 +87,24 @@ namespace OnlineShop.Client.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authService.AuthenticationToken.Login + ":" + authService.AuthenticationToken.Token);
             UserDto user = null;
             string requestUri = Properties.Resources.UrlToServer + "User/GetUser/" + id;
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                user = serializer.Deserialize<UserDto>(jsonResult);
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    user = serializer.Deserialize<UserDto>(jsonResult);
+                }
+                return user;
             }
-            return user;
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
@@ -75,14 +112,25 @@ namespace OnlineShop.Client.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authService.AuthenticationToken.Login + ":" + authService.AuthenticationToken.Token);
             IEnumerable<UserDto> users = new UserDto[0];
             string requestUri = Properties.Resources.UrlToServer + "User/GetAllUsers";
-            var responceMessage = await client.GetAsync(requestUri);
-            if (responceMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responceMessage.Content.ReadAsStringAsync();
-                users = serializer.Deserialize<IEnumerable<UserDto>>(jsonResult);
-            }
+                var responceMessage = await client.GetAsync(requestUri);
+                if (responceMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responceMessage.Content.ReadAsStringAsync();
+                    users = serializer.Deserialize<IEnumerable<UserDto>>(jsonResult);
+                }
 
-            return users;
+                return users;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
 
         public async Task UpdateAsync(UserDto user)
@@ -90,7 +138,18 @@ namespace OnlineShop.Client.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authService.AuthenticationToken.Login + ":" + authService.AuthenticationToken.Token);
             string jsonRequest = serializer.Serialize(user);
             string requestUri = Properties.Resources.UrlToServer + "User/Update";
-            var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            try
+            {
+                var responseMessage = await client.PutAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+            }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
         }
     }
 }

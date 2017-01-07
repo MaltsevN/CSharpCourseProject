@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Client.Common;
+using OnlineShop.Client.Exceptions;
 using OnlineShop.Client.Models;
 using OnlineShop.Client.Services;
 using OnlineShop.DTO;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -18,6 +20,7 @@ namespace OnlineShop.Client.ViewModels
     {
         private readonly IOrderItemService orderItemService;
         private readonly IProductService productService;
+        private readonly IMessegeManager messageService;
         private ICollectionView collectionView;
 
         private bool isBusy;
@@ -31,10 +34,11 @@ namespace OnlineShop.Client.ViewModels
             }
         }
 
-        public EditOrderWindowViewModel(IOrderItemService orderItemService, IProductService productService)
+        public EditOrderWindowViewModel(IOrderItemService orderItemService, IProductService productService, IMessegeManager messageService)
         {
             this.orderItemService = orderItemService;
             this.productService = productService;
+            this.messageService = messageService;
             OrderItems = new ObservableCollection<CheckableItem<OrderItemDto>>();
             collectionView = CollectionViewSource.GetDefaultView(OrderItems);
             collectionView.Filter = SearchFilter;
@@ -84,25 +88,39 @@ namespace OnlineShop.Client.ViewModels
         private async void WindowLoadedCommandExecute(object obj)
         {
             IsBusy = true;
-            foreach (ProductDto product in await productService.GetProductsAsync())
+            try
             {
-                OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
-                if (orderItem != null)
+                foreach (ProductDto product in await productService.GetProductsAsync())
                 {
-                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                    OrderItemDto orderItem = Order.OrderItems.Find(item => item.Product.Id == product.Id);
+                    if (orderItem != null)
                     {
-                        IsChecked = true
-                    });
-                }
-                else
-                {
-                    orderItem = new OrderItemDto() { Product = product, Quantity = 1 };
-                    OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                        OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                        {
+                            IsChecked = true
+                        });
+                    }
+                    else
                     {
-                        IsChecked = false
-                    });
+                        orderItem = new OrderItemDto() { Product = product, Quantity = 1 };
+                        OrderItems.Add(new CheckableItem<OrderItemDto>(orderItem)
+                        {
+                            IsChecked = false
+                        });
+                    }
                 }
             }
+            catch (NoInternetConnectionException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
+            }
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
+            }
+            
             IsBusy = false;
         }
         #endregion
@@ -135,29 +153,42 @@ namespace OnlineShop.Client.ViewModels
             var deletedOrderItems = existingOrderItems.Where(existingOrderItem => !newOrderItems.Any(orderItem => orderItem.Id == existingOrderItem.Id)).ToList();
             var updatedOrderItems = existingOrderItems.Where(existingOrderItem => !deletedOrderItems.Any(deletedOrderItem => deletedOrderItem.Id == existingOrderItem.Id)).ToList();
 
-            foreach (OrderItemDto orderItem in addedOrderItems)
+            try
             {
-                orderItem.OrderId = Order.Id;
-                var createdOrderItem = await orderItemService.CreateAsync(orderItem);
-                Order.OrderItems.Add(createdOrderItem);
-            }
+                foreach (OrderItemDto orderItem in addedOrderItems)
+                {
+                    orderItem.OrderId = Order.Id;
+                    var createdOrderItem = await orderItemService.CreateAsync(orderItem);
+                    Order.OrderItems.Add(createdOrderItem);
+                }
 
-            foreach (OrderItemDto orderItem in deletedOrderItems)
+                foreach (OrderItemDto orderItem in deletedOrderItems)
+                {
+                    await orderItemService.DeleteAsync(orderItem.Id);
+                    Order.OrderItems.Remove(orderItem);
+                }
+
+                foreach (OrderItemDto orderItem in updatedOrderItems)
+                {
+                    await orderItemService.UpdateAsync(orderItem);
+                    var tempOrderItem = Order.OrderItems.Find(o => o.Id == orderItem.Id);
+                    Order.OrderItems.Remove(tempOrderItem);
+                    Order.OrderItems.Add(orderItem);
+                }
+
+                IsBusy = false;
+                Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, true);
+            }
+            catch (NoInternetConnectionException ex)
             {
-                await orderItemService.DeleteAsync(orderItem.Id);
-                Order.OrderItems.Remove(orderItem);
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
-
-            foreach (OrderItemDto orderItem in updatedOrderItems)
+            catch (HttpRequestException ex)
             {
-                await orderItemService.UpdateAsync(orderItem);
-                var tempOrderItem = Order.OrderItems.Find(o => o.Id == orderItem.Id);
-                Order.OrderItems.Remove(tempOrderItem);
-                Order.OrderItems.Add(orderItem);
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
-
             IsBusy = false;
-            Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, true);
+
         }
         #endregion
 

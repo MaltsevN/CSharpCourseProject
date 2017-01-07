@@ -1,9 +1,12 @@
 ﻿using OnlineShop.Client.Common;
+using OnlineShop.Client.Exceptions;
 using OnlineShop.Client.Services;
 using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -55,26 +58,37 @@ namespace OnlineShop.Client.ViewModels
         private async void SignInCommandExecute(object obj)
         {
             IsBusy = true;
-            await authService.SignIn(Login, Password);
-            if (authService.AuthenticationToken == null)
+            try
             {
-                messageService.ShowMessage("Unable to log in. Please check that you have entered your login and password correctly.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                await authService.SignIn(Login, Password);
+                if (authService.AuthenticationToken == null)
+                {
+                    messageService.ShowMessage("Unable to log in. Please check that you have entered your login and password correctly.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+                else
+                {
+                    UserDto user = await userService.GetUserAsync(authService.AuthenticationToken.UserId);
+                    if (user.Rank == RankDto.Client)
+                    {
+                        Messenger.Default.Send<WindowMessege, UserDto>(WindowMessege.OpenOrdersWindow, user);
+                    }
+                    if (user.Rank == RankDto.Admin)
+                    {
+                        Messenger.Default.Send<WindowMessege, object>(WindowMessege.OpenAdminOrderWindow, null);
+                    }
+
+                    Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
+                }
             }
-            else
+            catch (NoInternetConnectionException ex)
             {
-                UserDto user = await userService.GetUserAsync(authService.AuthenticationToken.UserId);
-                if (user.Rank == RankDto.Client)
-                {
-                    Messenger.Default.Send<WindowMessege, UserDto>(WindowMessege.OpenOrdersWindow, user);
-                }
-                if (user.Rank == RankDto.Admin)
-                {
-                    Messenger.Default.Send<WindowMessege, object>(WindowMessege.OpenAdminOrderWindow, null);
-                }
-
-                Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
-
+            catch (HttpRequestException ex)
+            {
+                messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            
             IsBusy = false;
         }
 

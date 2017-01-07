@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using OnlineShop.DTO;
 using System.Net.Http;
 using System.Web.Script.Serialization;
+using System.Net.NetworkInformation;
+using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
@@ -26,12 +28,24 @@ namespace OnlineShop.Client.Services
         {
             string jsonRequest = serializer.Serialize(new { login = login, password = password });
             string requestUri = Properties.Resources.UrlToServer + "Account/SignIn";
-            var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-            if (responseMessage.IsSuccessStatusCode)
+            try
             {
-                string jsonResult = await responseMessage.Content.ReadAsStringAsync();
-                AuthenticationToken = serializer.Deserialize<AuthenticationTokenDto>(jsonResult);
+                var responseMessage = await client.PostAsync(requestUri, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string jsonResult = await responseMessage.Content.ReadAsStringAsync();
+                    AuthenticationToken = serializer.Deserialize<AuthenticationTokenDto>(jsonResult);
+                }
             }
+            catch (HttpRequestException ex)
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    throw new NoInternetConnectionException("No internet connection, please try again later.");
+                }
+                throw ex;
+            }
+            
         }
     }
 }
