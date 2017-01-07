@@ -88,6 +88,7 @@ namespace OnlineShop.Client.ViewModels
         private async void WindowLoadedCommandExecute(object obj)
         {
             IsBusy = true;
+            Logger.For(this).Info("EditOrderWindow is loading");
             try
             {
                 foreach (ProductDto product in await productService.GetProductsAsync())
@@ -112,15 +113,17 @@ namespace OnlineShop.Client.ViewModels
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
             }
-            
+            Logger.For(this).Info("EditOrderWindow is loaded");
             IsBusy = false;
         }
         #endregion
@@ -145,6 +148,7 @@ namespace OnlineShop.Client.ViewModels
 
         private async void SaveOrderCommandExecute(object obj)
         {
+            Logger.For(this).Info("Saving order");
             IsBusy = true;
             var existingOrderItems = Order.OrderItems;
             var newOrderItems = OrderItems.Where(checkableItem => checkableItem.IsChecked).Select(checkableItem => checkableItem.Item);
@@ -155,6 +159,7 @@ namespace OnlineShop.Client.ViewModels
 
             try
             {
+                Logger.For(this).Info("Adding new order items");
                 foreach (OrderItemDto orderItem in addedOrderItems)
                 {
                     orderItem.OrderId = Order.Id;
@@ -162,12 +167,14 @@ namespace OnlineShop.Client.ViewModels
                     Order.OrderItems.Add(createdOrderItem);
                 }
 
+                Logger.For(this).Info("Removing older order items");
                 foreach (OrderItemDto orderItem in deletedOrderItems)
                 {
                     await orderItemService.DeleteAsync(orderItem.Id);
                     Order.OrderItems.Remove(orderItem);
                 }
 
+                Logger.For(this).Info("Updating existing order items");
                 foreach (OrderItemDto orderItem in updatedOrderItems)
                 {
                     await orderItemService.UpdateAsync(orderItem);
@@ -177,14 +184,18 @@ namespace OnlineShop.Client.ViewModels
                 }
 
                 IsBusy = false;
+                Logger.For(this).Info("Order is saved");
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, true);
+                Logger.For(this).Info("Close EditOrderWindow");
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             IsBusy = false;
@@ -207,6 +218,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void CancelCommandExecute(object obj)
         {
+            Logger.For(this).Info("Close EditOrderWindow");
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseEditOrderWindow, false);
         }
         #endregion

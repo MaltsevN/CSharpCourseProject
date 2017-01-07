@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlineShop.Client.Common;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,15 @@ namespace OnlineShop.Client
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Logger.InitLogger();
+            base.OnStartup(e);
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Logger.For(this).Fatal(e.Exception.Message);
+        }
     }
 }

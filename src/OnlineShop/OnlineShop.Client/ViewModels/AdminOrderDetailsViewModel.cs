@@ -89,6 +89,7 @@ namespace OnlineShop.Client.ViewModels
             IsBusy = true;
             try
             {
+                Logger.For(this).Info("AdminOrderDetailWindow is loading");
                 var products = await productService.GetProductsAsync();
                 foreach (ProductDto product in products)
                 {
@@ -101,14 +102,17 @@ namespace OnlineShop.Client.ViewModels
                         });
                     }
                 }
+                Logger.For(this).Info("AdminOrderDetailWindow is loaded");
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseOrderDetailsWindow, false);
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseOrderDetailsWindow, false);
             }
@@ -132,6 +136,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void CancelCommandExecute(object obj)
         {
+            Logger.For(this).Info("AdminOrderDetailWindow is close");
             Messenger.Default.Send<WindowMessege, bool?>(WindowMessege.CloseOrderDetailsWindow, false);
         }
         #endregion

@@ -27,6 +27,7 @@ namespace OnlineShop.Client.ViewModels
             this.authService = authService;
             this.messageService = messageService;
             this.userService = userService;
+            Logger.For(this).Info("Init AuthenticationWindow");
         }
 
         private bool isBusy;
@@ -58,11 +59,13 @@ namespace OnlineShop.Client.ViewModels
         private async void SignInCommandExecute(object obj)
         {
             IsBusy = true;
+            Logger.For(this).Info("Sign in");
             try
             {
                 await authService.SignIn(Login, Password);
                 if (authService.AuthenticationToken == null)
                 {
+                    Logger.For(this).Info("Unable to log in.");
                     messageService.ShowMessage("Unable to log in. Please check that you have entered your login and password correctly.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
                 else
@@ -70,22 +73,26 @@ namespace OnlineShop.Client.ViewModels
                     UserDto user = await userService.GetUserAsync(authService.AuthenticationToken.UserId);
                     if (user.Rank == RankDto.Client)
                     {
+                        Logger.For(this).Info("Open OrdersWindow");
                         Messenger.Default.Send<WindowMessege, UserDto>(WindowMessege.OpenOrdersWindow, user);
                     }
                     if (user.Rank == RankDto.Admin)
                     {
+                        Logger.For(this).Info("Open AdminOrderWindow");
                         Messenger.Default.Send<WindowMessege, object>(WindowMessege.OpenAdminOrderWindow, null);
                     }
-
+                    Logger.For(this).Info("Close AuthenticationWindow");
                     Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
                 }
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             
@@ -113,6 +120,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void CloseCommandExecute(object obj)
         {
+            Logger.For(this).Info("Close AuthenticationWindow");
             Messenger.Default.Send<WindowMessege, object>(WindowMessege.CloseAuthenticationWindow, null);
         }
         #endregion

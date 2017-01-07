@@ -137,6 +137,7 @@ namespace OnlineShop.Client.ViewModels
         private async void AddNewOrderCommandExecute(object obj)
         {
             IsBusy = true;
+            Logger.For(this).Info("Adding new order");
             OrderDto newOrder = new OrderDto()
             {
                 Name = NewOrderName,
@@ -160,13 +161,16 @@ namespace OnlineShop.Client.ViewModels
                 IsBusy = false;
                 NewOrderName = string.Empty;
                 Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
+                Logger.For(this).Info("New order is added");
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             IsBusy = false;
@@ -190,6 +194,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void WindowLoadedCommandExecute(object obj)
         {
+            Logger.For(this).Info("OrdersWindow is loading");
             IsBusy = true;
             foreach (var order in User.Orders)
             {
@@ -217,19 +222,23 @@ namespace OnlineShop.Client.ViewModels
             var result = messageService.ShowMessage("Are you sure you want to delete this order?", "Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
             if (result == System.Windows.MessageBoxResult.Yes)
             {
+                Logger.For(this).Info("Removing order");
                 IsBusy = true;
                 try
                 {
                     await orderService.DeleteAsync(SelectedOrder.Id);
                     User.Orders.Remove(SelectedOrder);
                     Orders.Remove(SelectedOrder);
+                    Logger.For(this).Info("Order is removed");
                 }
                 catch (NoInternetConnectionException ex)
                 {
+                    Logger.For(this).Error(ex.Message);
                     messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
                 catch (HttpRequestException ex)
                 {
+                    Logger.For(this).Error(ex.Message);
                     messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
                 
@@ -258,6 +267,7 @@ namespace OnlineShop.Client.ViewModels
         private async void ConfirmOrderCommandExecute(object obj)
         {
             IsBusy = true;
+            Logger.For(this).Info("Confirming order");
             SelectedOrder.Status = StatusDto.Processing;
             try
             {
@@ -265,11 +275,13 @@ namespace OnlineShop.Client.ViewModels
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 SelectedOrder.Status = StatusDto.NotDecorated;
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 SelectedOrder.Status = StatusDto.NotDecorated;
             }
@@ -299,6 +311,7 @@ namespace OnlineShop.Client.ViewModels
 
         private async void CancelOrderCommandExecute(object obj)
         {
+            Logger.For(this).Info("Canceling order");
             IsBusy = true;
             SelectedOrder.Status = StatusDto.NotDecorated;
             try
@@ -307,11 +320,13 @@ namespace OnlineShop.Client.ViewModels
             }
             catch (NoInternetConnectionException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 SelectedOrder.Status = StatusDto.Processing;
             }
             catch (HttpRequestException ex)
             {
+                Logger.For(this).Error(ex.Message);
                 messageService.ShowMessage(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 SelectedOrder.Status = StatusDto.Processing;
             }
@@ -348,6 +363,7 @@ namespace OnlineShop.Client.ViewModels
 
         private void EditOrderCommandExecute(object obj)
         {
+            Logger.For(this).Info("Open EditOrderWindow");
             clonedOrder = ObjectCopier.Clone<OrderDto>(SelectedOrder);
             Messenger.Default.Send<WindowMessege, OrderDto>(WindowMessege.OpenEditOrderWindow, clonedOrder);
         }
