@@ -12,7 +12,7 @@ using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
-    class OrderItemService : IOrderItemService
+    class OrderItemService : IOrderItemService, IDisposable
     {
         private readonly HttpClient client;
         private readonly JavaScriptSerializer serializer;
@@ -145,6 +145,11 @@ namespace OnlineShop.Client.Services
                 }
                 throw ex;
             }
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

@@ -12,7 +12,7 @@ using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
-    class UserService : IUserService
+    class UserService : IUserService, IDisposable
     {
         private readonly IAuthenticationService authService;
         private readonly HttpClient client;
@@ -150,6 +150,11 @@ namespace OnlineShop.Client.Services
                 }
                 throw ex;
             }
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

@@ -11,7 +11,7 @@ using OnlineShop.Client.Exceptions;
 
 namespace OnlineShop.Client.Services
 {
-    class AuthenticationService : IAuthenticationService
+    class AuthenticationService : IAuthenticationService, IDisposable
     {
         public AuthenticationTokenDto AuthenticationToken { get; private set; }
 
@@ -46,6 +46,11 @@ namespace OnlineShop.Client.Services
                 throw ex;
             }
             
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }
