@@ -25,6 +25,9 @@ namespace OnlineShop.DTO
         [DataMember]
         public List<OrderDto> Orders { get; set; }
 
+        [DataMember]
+        public string Password { get; set; }
+
         public UserDto()
         {
             Orders = new List<OrderDto>();

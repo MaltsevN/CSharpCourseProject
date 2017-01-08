@@ -26,6 +26,14 @@ namespace OnlineShop.Client.Views
         {
             InitializeComponent();
             Messenger.Default.Register<WindowMessege, OrderDto>(this, WindowMessege.OpenOrderDetailsWindow, OpenOrderDetailsWindow);
+            Messenger.Default.Register<WindowMessege, object>(this, WindowMessege.OpenUsersWindow, OpenUsersWindow);
+        }
+
+        private void OpenUsersWindow(object obj)
+        {
+            UsersWindow window = new UsersWindow();
+            window.Owner = this;
+            window.ShowDialog();
         }
 
         private void OpenOrderDetailsWindow(OrderDto order)

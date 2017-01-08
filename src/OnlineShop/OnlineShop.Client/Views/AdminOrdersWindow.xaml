@@ -68,6 +68,9 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                <Button Padding="24, 5" Margin="5" Content="Users" Command="{Binding OpenUsersWindowCommand, Mode=OneWay}"></Button>
+            </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button Padding="24, 5" Margin="5" Content="Details" Command="{Binding AdminOrderDetailsCommand, Mode=OneWay}"></Button>
                 <Button Padding="24, 5" Margin="5" Content="Confirm order" Command="{Binding ConfirmOrderCommand, Mode=OneWay}"></Button>

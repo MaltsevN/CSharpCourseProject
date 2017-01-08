@@ -262,7 +262,27 @@ namespace OnlineShop.Client.ViewModels
         }
 
         #endregion
-        
+
+        #region OpenUsersWindowCommand
+        private RelayCommand<object, object> openUsersWindowCommand;
+
+        public ICommand OpenUsersWindowCommand
+        {
+            get
+            {
+                if (openUsersWindowCommand == null)
+                    openUsersWindowCommand = new RelayCommand<object, object>(OpenUsersWindowCommandExecute);
+                return openUsersWindowCommand;
+            }
+        }
+
+        private void OpenUsersWindowCommandExecute(object obj)
+        {
+            Logger.For(this).Info("Open UsersWindow");
+            Messenger.Default.Send<WindowMessege, object>(WindowMessege.OpenUsersWindow, null);
+        }
+        #endregion
+
     }
 }
 

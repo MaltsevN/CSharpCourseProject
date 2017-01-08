@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DAL;
 using DomainModel;
+using OnlineShop.BL.Security;
 using OnlineShop.DTO;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace OnlineShop.BL
         public UserDto Create(UserDto item)
         {
             User convertedUser = Mapper.Map<UserDto, User>(item);
+            convertedUser.Password = Encryptor.MD5Hash(convertedUser.Password);
             User user = userRepository.Create(convertedUser);
             userRepository.Save();
             UserDto dto = Mapper.Map<User, UserDto>(user);
@@ -56,6 +58,7 @@ namespace OnlineShop.BL
         public void Update(UserDto item)
         {
             User convertedUser = Mapper.Map<UserDto, User>(item);
+            convertedUser.Password = Encryptor.MD5Hash(convertedUser.Password);
             userRepository.Update(convertedUser);
             userRepository.Save();
         }
